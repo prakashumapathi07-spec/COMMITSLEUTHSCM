@@ -140,6 +140,22 @@ def store_failure(build_no, log_text, commits, ftype_override=None):
     log_audit("Jenkins-Agent", f"Recorded Build Failure #{build_no}", f"Attributed to {top['hash']} ({top['author']}) with confidence {top['score']}")
     return pid
 
+def read_log_file(path):
+    """Safely reads a log file detecting UTF-16 BOM (from PowerShell redirection) or UTF-8."""
+    if not os.path.exists(path):
+        return ""
+    try:
+        with open(path, "rb") as f:
+            raw = f.read()
+        if raw.startswith(b"\xff\xfe") or raw.startswith(b"\xfe\xff"):
+            return raw.decode("utf-16", errors="ignore")
+        try:
+            return raw.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            return raw.decode("cp1252", errors="ignore")
+    except Exception:
+        return ""
+
 def record(build_no, result, log_file="build.log", branch=None):
     branch = branch or git("rev-parse", "--abbrev-ref", "HEAD") or "main"
     head = git("rev-parse", "--short", "HEAD")
@@ -150,27 +166,23 @@ def record(build_no, result, log_file="build.log", branch=None):
     test_summary = "All tests passed"
 
     if result == "FAILURE":
-        if os.path.exists(log_file):
-            try:
-                with open(log_file, "r", encoding="utf-8", errors="ignore") as f:
-                    log_text = f.read()
-            except Exception:
-                pass
-        
+        log_text = read_log_file(log_file)
         parsed = log_parser.parse_log(log_text)
         ftype = parsed["failure_type"]
         test_summary = parsed["error_message"]
 
-        commits = commits_since_last_success()
-        if commits:
-            store_failure(build_no, log_text, commits, ftype)
-
+    # Insert build record first to satisfy foreign key in problems table
     ex(
         """INSERT OR REPLACE INTO builds (
             build_no, result, commit_hash, branch, failure_type, test_summary, duration_sec, log_path, created
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (build_no, result, head, branch, ftype, test_summary, 12.5, log_file if os.path.exists(log_file) else None, now)
     )
+
+    if result == "FAILURE":
+        commits = commits_since_last_success()
+        if commits:
+            store_failure(build_no, log_text, commits, ftype)
 
     log_audit("Jenkins-Agent", f"Build #{build_no} Finished: {result}", f"Commit {head} on branch {branch}")
     print(f"Build #{build_no} recorded: {result} at commit {head} ({branch})")
