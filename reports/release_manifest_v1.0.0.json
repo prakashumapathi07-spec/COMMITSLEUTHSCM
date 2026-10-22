@@ -1,0 +1,35 @@
+{
+  "release_id": "CommitSleuth_v1.0.0",
+  "project": "CommitSleuth \u2014 Intelligent CI Build Failure Attribution",
+  "course": "ISWE403L \u2014 Software Configuration Management",
+  "version": "v1.0.0",
+  "baseline_identifier": "BL-05",
+  "git_tag": "v1.0.0",
+  "commit_hash_full": "5a9fbde439a7443c854c2d59a021406a869407a4",
+  "commit_hash_short": "5a9fbde",
+  "approval_status": "Approved",
+  "approver": "Faculty Guide / CCB",
+  "verification_gate": {
+    "build_number": 103,
+    "test_summary": "7 tests executed (5 CalculatorTest, 2 ValidatorTest), 0 failures, 0 errors",
+    "scm_change_request": "CR-009 (Implemented and Verified)"
+  },
+  "artifacts": [
+    {
+      "file": "maven/target/demo-app-1.0.0.jar",
+      "type": "Java Executable Binary JAR",
+      "sha256": "821e2098337c144c14698a82d56e37d7693bc910a22be63cd0f8f558a4b4ea61"
+    },
+    {
+      "file": "reports/CSAR-20261022.txt",
+      "type": "Configuration Status Accounting Report",
+      "sha256": "d93bb4a294311931f2bd4321312daa38fffac54fb2f43cf51ad6b9565990d3e6"
+    },
+    {
+      "file": "scoring_config.yaml",
+      "type": "SCM Customization Configuration",
+      "sha256": "c291e8a46644caa4dbdadf51b98edd8acb178b20ef3050f9e14acccebea9c266"
+    }
+  ],
+  "created_timestamp": "2026-10-22 13:26:47"
+}
