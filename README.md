@@ -1,219 +1,118 @@
-# CommitSleuth — Intelligent CI Build Failure Attribution System
+# CommitSleuth — Automated Build Failure Tracking & Developer Alert Platform
 
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![Maven 3.9](https://img.shields.io/badge/Maven-3.9-C71A36.svg)](https://maven.apache.org/)
 [![Jenkins CI](https://img.shields.io/badge/Jenkins-Declarative%20Pipeline-D24939.svg)](https://www.jenkins.io/)
 [![Flask 3.1](https://img.shields.io/badge/Flask-3.1-000000.svg)](https://flask.palletsprojects.com/)
 [![SQLite 3](https://img.shields.io/badge/SQLite-3.45-003B57.svg)](https://www.sqlite.org/)
-[![Tests Passed](https://img.shields.io/badge/pytest-17%20Passed-brightgreen.svg)]()
+[![pytest](https://img.shields.io/badge/pytest-22%20Passed-brightgreen.svg)]()
+[![JUnit 5](https://img.shields.io/badge/JUnit-20%20Tests%20Passed-brightgreen.svg)]()
 [![Java 17](https://img.shields.io/badge/JDK-17%20LTS-orange.svg)]()
 
 > **Course:** ISWE403L — Software Configuration Management (SCM)  
 > **Review:** SCM Final Review — Tool Implementation (Review-III)  
 > **Institution:** School of Computer Science Engineering and Information Systems (SCOPE), Vellore Institute of Technology (VIT), Vellore  
-> **Team Members:**  
+> **Project Team Members:**  
 > * **Bharathwaraj K S** — Register No: **23MIS0070**  
 > * **Prakash Raj U** — Register No: **23MIS0180**  
 > **Repository:** [https://github.com/prakashumapathi07-spec/COMMITSLEUTHSCM.git](https://github.com/prakashumapathi07-spec/COMMITSLEUTHSCM.git)
 
 ---
 
-## 📖 Overview
+## 🏢 Scenario: TechNova Solutions (Employee Management System)
 
-**CommitSleuth** is an intelligent build failure attribution and Software Configuration Management (SCM) automation platform designed for modern continuous integration pipelines.
+CommitSleuth demonstrates an enterprise DevOps failure tracking and SCM governance platform for a fictional engineering company called **TechNova Solutions**, where four developers collaborate on an **Employee Management System** across dedicated feature branches:
 
-When developer commit velocity is high, multiple commits accumulate between continuous integration builds—a challenge known as the **batching problem**. Conventional CI engines simply mark the pipeline as failed, forcing engineers to fall back on an unreliable "blame the latest commit" heuristic.
+* **Prakash Raj** — Employee module — `feature/employee` (`EmployeeService.java`)
+* **Bharathwaraj** — Authentication module — `feature/login` (`AuthService.java`)
+* **Karthik** — Reports module — `feature/reports` (`ReportService.java`)
+* **Divya** — Database module — `feature/database` (`DatabaseService.java`)
 
-CommitSleuth resolves this by:
-1. Monitoring Jenkins and Maven/Surefire execution output.
-2. Intercepting compilation, dependency, or unit test failures.
-3. Analyzing the complete range of candidate commits introduced since the last successful baseline.
-4. Calculating multi-factor, normalized confidence scores based on affected source files, test-to-source mapping, dependency changes in `pom.xml`, recency, and changeset size.
-5. Formulating transparent, explainable evidence and safety-checked rollback recommendations (`git revert <hash>`).
-6. Enforcing SCM quality gates for promotion between Development, Testing, and Production baselines.
+### Central Scenario:
+1. **Defect Introduced:** Karthik introduces an intentional defect in `ReportService.java` under Change Request **CR-009** and pushes commit `a91bc42` to `feature/reports`.
+2. **Build Break:** Jenkins triggers Build **#128** running `mvn test`. `ReportServiceTest` fails with `AssertionFailedError: expected <95000.0> but was <0.0>`.
+3. **Automated Attribution:** CommitSleuth intercepts the failure, attributes it to Karthik with **88.5% confidence**, opens Problem **BUG-024**, and dispatches Alert **ALT-001**.
+4. **Investigation & Fix:** Karthik inspects the terminal log and fix suggestions on `/failures/128`, acknowledges the alert, and submits corrective commit `c48fe19` (**CR-010**).
+5. **Verified Resolution:** Build **#129** passes all 20 tests. BUG-024 is marked `Resolved`.
+6. **Promotion Gate:** Promotion gate blocks Build #128 and approves Build #129 across Development $\rightarrow$ Testing $\rightarrow$ Release Candidate $\rightarrow$ Production.
 
 ---
 
-## 🛠️ Toolchain and SCM Integration
+## 🎨 UI/UX Design Direction
 
-| Tool | Role in CommitSleuth | SCM Activity Supported |
-|---|---|---|
-| **Git & GitHub** | Version control, branching (`main`, `develop`, `bugfix/*`, `feature/*`), tags (`v0.1.0`, `v0.2.0`, `v1.0.0`), commit-msg hooks | Version Management & Baseline Control |
-| **Jenkins** | Automated declarative CI pipeline execution on commit/push | Continuous Integration & Automated Verification |
-| **Apache Maven** | Java application compilation, JUnit 5 Surefire test runner, dependency management | Build Automation & Dependency Control |
-| **Python 3** | Build log parsing, commit scoring heuristic engine, status reporter, release manager | Failure Attribution & SCM Automation |
-| **SQLite3** | Central relational database storing builds, candidate scores, problems, CRs, baselines, and audit observations | Configuration Status Accounting (CSA) |
-| **Flask** | Modern, responsive executive web dashboard with Role-Based Access Control | Web Enabling & Management Portal |
+CommitSleuth is designed with a **Pure Light Theme** layout inspired by modern enterprise cloud dashboards:
+* **Background:** Soft slate-50 (`#f8fafc`) with white card surfaces (`#ffffff`) and subtle borders (`#e2e8f0`).
+* **Header & Navigation:** Sticky top header with project selector, repository badge, search input, unread alert counter, and instant scenario persona switcher.
+* **Charts:** Interactive SVG Stacked Area Chart (Build Trends) and Stacked Bar Chart (Build Status by Module).
+* **Investigation View:** Interactive line-numbered log terminal with colored PASS/FAIL markers, root-cause card, evidence breakdown, and syntax-highlighted fix suggestions.
+* **Responsive:** Full desktop, tablet, and mobile support.
 
 ---
 
 ## 🚀 Quickstart Guide
 
 ### 1. Prerequisites
-Ensure the following tools are installed on your machine:
-* **Python 3.10+** (with pip)
+* **Python 3.10+**
 * **Java SE JDK 17+**
 * **Apache Maven 3.8+**
 * **Git 2.40+**
 
-### 2. Clone and Setup
+### 2. Setup and Database Initialization
 ```powershell
-# Clone the repository
+# Clone repository
 git clone https://github.com/prakashumapathi07-spec/COMMITSLEUTHSCM.git
 cd COMMITSLEUTHSCM
 
-# Install Python dependencies
+# Install Python requirements
 pip install -r requirements.txt
 
-# Initialize and seed the SQLite SCM database
+# Seed the TechNova scenario database
 python database/seed.py --reset
 ```
 
 ### 3. Run Automated Tests
 ```powershell
-# Execute Python SCM test suite (17 tests)
-pytest tests/
+# Run Python SCM test suite (22 tests)
+pytest
 
-# Execute Java Maven test suite (7 tests)
+# Run Java Maven test suite (20 unit tests)
 mvn -B -f maven/pom.xml test
 ```
 
-### 4. Launch the Web Portal
+### 4. Launch the Web Application
 ```powershell
 python dashboard/app.py
 ```
-Open your browser and navigate to: **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
+Open your browser to: **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
 
-#### Demonstration Credentials:
-* **Administrator:** `prakash` / `admin123`
-* **Administrator:** `bharath` / `admin123`
-* **Auditor / Viewer:** `viewer` / `viewer123`
-
----
-
-## 🧪 Reproducing the End-to-End Scenario
-
-CommitSleuth includes a realistic, repeatable demonstration proving how it overcomes the batching problem.
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Dev as Developer (Prakash / Bharath)
-    participant Git as Git Repository
-    participant Maven as Maven / Surefire
-    participant CS as CommitSleuth Analyzer
-    participant DB as SQLite Status DB
-    participant UI as Flask Dashboard
-
-    Dev->>Git: Push Commit 1 (Prakash): Seeds Calculation Defect in Calculator.java
-    Dev->>Git: Push Commit 2 (Bharath): Updates docs/notes.md (HEAD)
-    Note over Git: Multi-commit batch window accumulated since Build #101
-    Maven->>Maven: mvn test fails on CalculatorTest.addsTwoNumbers
-    Maven->>CS: Dispatches build.log with test failure assertion
-    CS->>Git: Retrieves all commits since Build #101 (f1127d0..HEAD)
-    CS->>CS: Multi-factor scoring correlates CalculatorTest to Calculator.java
-    Note over CS: Prakash's commit scores 77.8% (Probable Cause)<br/>Bharath's commit scores 22.2% (Unlikely Cause)
-    CS->>DB: Records Problem P-001, confidence score, and revert advisory
-    CS->>UI: Displays failure attribution and candidate matrix
-    Dev->>Git: Push Commit 3 (Prakash): Fixes Calculator.java (CR-009)
-    Maven->>Maven: mvn clean test passes 7/7 tests
-    CS->>DB: Records Build #103 SUCCESS; closes Problem P-001
-    CS->>CS: Evaluates Promotion Gate to Production (BL-05 / v1.0.0)
-```
-
-### Execution Steps:
-1. **Record Baseline Passing Build #101:**
-   ```powershell
-   python analyzer/record_build.py --result SUCCESS --build 101 --branch develop
-   ```
-2. **Switch to Demonstration Branch with Seeded Batch:**
-   ```powershell
-   git checkout bugfix/demo-calc-failure
-   ```
-3. **Trigger Build Failure & Capture Output:**
-   ```powershell
-   mvn -B -f maven/pom.xml test > build.log 2>&1
-   ```
-4. **Run CommitSleuth Attribution Analyzer:**
-   ```powershell
-   python analyzer/record_build.py --result FAILURE --build 102 --log build.log --branch bugfix/demo-calc-failure
-   ```
-   *Output demonstrates:*
-   `NOTIFY: Build #102 FAILED (test). Suspect commit 9297e33 by Prakash Raj U, confidence 0.778. Action: Rollback recommended: git revert 9297e33`
-5. **Verify Defect Resolution & Passing Build #103:**
-   ```powershell
-   git checkout main
-   mvn -B -f maven/pom.xml test
-   python analyzer/record_build.py --result SUCCESS --build 103 --branch main
-   ```
-6. **Evaluate SCM Promotion Gate:**
-   ```powershell
-   python analyzer/promote.py --item "CommitSleuth Suite" --from Testing --to Production --approver "CCB" --tests-passed --cr CR-009 --tag v1.0.0
-   ```
-7. **Generate Cryptographic Release Manifest:**
-   ```powershell
-   python analyzer/release_manager.py
-   ```
+#### Persona Accounts:
+* **Prakash Raj (Lead / Admin):** `prakash` / `admin123`
+* **Bharathwaraj (Auth / Admin):** `bharath` / `admin123`
+* **Karthik (Reports / Dev):** `karthik` / `maint123`
+* **Divya (Database / Dev):** `divya` / `maint123`
+* **SCM Auditor / Reviewer:** `viewer` / `viewer123`
 
 ---
 
-## 📊 Summary of SCM Final Review Activities
+## 📋 Complete SCM Activities Coverage
 
-| No. | SCM Activity | Implemented Solution | Verification Location |
-|---|---|---|---|
-| **1** | **Tool Implementation** | Git/GitHub, Jenkins, Maven, Python, Flask, SQLite | Working end-to-end toolchain |
-| **2** | **Version Management** | Branching model (`main`, `develop`, `bugfix/*`), tags (`v0.1.0`, `v0.2.0`, `v1.0.0`), commit-msg hook | Git history, `/baselines` |
-| **3** | **Change Management** | Formal CR register (CR-001..CR-009), impact assessment, CCB approval transitions | `/crs` |
-| **4** | **Problem Tracking** | Defect tracking (P-001), candidate commit ranking, 5-stage lifecycle (`Open` $\rightarrow$ `Closed`) | `/problems`, `/problem/<id>` |
-| **5** | **Promotional Management** | SCM promotion quality gates, blocked vs passed records, CCB approval verification | `/promotions`, `promote.py` |
-| **6** | **System Accounting** | 20 CIs registered, CSAR report generator, dynamic CSV export | `/report`, `/report/csv` |
-| **7** | **CAS (Auditing)** | Functional Configuration Audit (FCA) & Physical Configuration Audit (PCA) checklists, observations AO-01..07 | `/audits` |
-| **8** | **Access and Security** | Role-Based Access Control (Admin, Maintainer, Viewer), password hashing, audit trail | `/audit-trail`, `/login` |
-| **9** | **Customization** | Configurable attribution weights and rollback thresholds via YAML and live UI editor | `/config`, `scoring_config.yaml` |
-| **10** | **Web Enabling** | Executive dark-mode responsive dashboard with 11 views | Flask app on port 5000 |
-
----
-
-## 📁 Repository Structure
-
-```text
-COMMITSLEUTHSCM/
-├── analyzer/
-│   ├── common.py             # Database connectivity, configuration, audit logging
-│   ├── log_parser.py         # Maven compiler and Surefire test log parser
-│   ├── promote.py            # SCM quality promotion gate evaluator
-│   ├── record_build.py       # Jenkins post-build agent & failure attribution trigger
-│   ├── release_manager.py    # Cryptographic SHA-256 release manifest generator
-│   ├── scorer.py             # Multi-factor commit ranking and rollback advisor
-│   └── status_reporter.py    # CSAR status report generator and CSV exporter
-├── dashboard/
-│   └── app.py                # Full-featured Flask web portal (11 routes)
-├── database/
-│   ├── schema.sql            # Relational SQLite schema (11 tables)
-│   └── seed.py               # Database initialization and seeder
-├── docs/
-│   ├── SCM_Final_Review_Tool_Implementation.md  # Comprehensive Final Review Report
-│   └── screenshots/          # 13 genuine screenshots from operational system
-├── hooks/
-│   └── commit-msg            # Git commit message policy enforcement hook
-├── jenkins/
-│   └── Jenkinsfile           # Declarative Jenkins CI pipeline definition
-├── maven/
-│   ├── pom.xml               # Maven configuration with JUnit 5 and Surefire
-│   └── src/                  # Java demonstration application (Calculator & Validator)
-├── reports/                  # Generated CSAR reports, release manifests, CSV files
-├── tests/
-│   ├── test_dashboard.py     # Integration tests for Flask routes and RBAC
-│   ├── test_log_parser.py    # Unit tests for Maven log parsing
-│   ├── test_promote.py       # Unit tests for SCM promotion gates
-│   └── test_scorer.py        # Unit tests for attribution ranking heuristics
-├── .gitignore
-├── README.md
-├── requirements.txt          # Python dependencies
-└── scoring_config.yaml       # Configurable attribution weights and thresholds
-```
+| SCM Activity | Implementation in CommitSleuth | Key File / Artifact |
+|---|---|---|
+| **Tool Implementation** | Jenkins declarative pipeline, Maven Surefire, Python attribution engine, Flask portal | `jenkins/Jenkinsfile`, `dashboard/app.py` |
+| **Version Management** | Git feature branches (`feature/*`), tags (`v0.1.0`..`v1.0.0`), commit-msg hooks | `hooks/commit-msg`, `/versions` |
+| **Change Management** | Formal CCB change requests (CR-001..CR-010) with impact and approval tracking | `database/schema.sql`, `/changes` |
+| **Problem Tracking** | Automated defect lifecycle: `Open` $\rightarrow$ `Fix Submitted` $\rightarrow$ `Resolved` | `analyzer/record_build.py`, `/problems` |
+| **Promotional Management** | Environment gates (Dev $\rightarrow$ Test $\rightarrow$ RC $\rightarrow$ Prod) blocking failed builds | `analyzer/promote.py`, `/releases` |
+| **System Accounting** | CSAR report generation and live dynamic CSV export | `analyzer/status_reporter.py`, `/accounting` |
+| **Configuration Audits (CAS)** | FCA (requirements verification) & PCA (checksum and manifest verification) | `audit_observations` table, `/audits` |
+| **Access & Security** | Role-Based Access Control (Admin, Maintainer, Viewer) and immutable audit trail | `/settings`, `/audit-trail` |
+| **Customization** | Configurable YAML ranking weights and CI server endpoints | `scoring_config.yaml`, `/settings` |
+| **Web Enabling** | Fully responsive modern web portal | `dashboard/app.py` |
 
 ---
 
-## 👥 Authors and Acknowledgments
-Developed by **Bharathwaraj K S (23MIS0070)** and **Prakash Raj U (23MIS0180)** for course **ISWE403L — Software Configuration Management** at **Vellore Institute of Technology (VIT), Vellore**.
+## 📌 Interactive Demo Workflow
+Use the **Scenario Controller** in the sidebar:
+1. Click **"1. Karthik Defect (#128)"** $\rightarrow$ Triggers failing build, opens BUG-024, dispatches alert.
+2. Click **"2. Karthik Fix (#129)"** $\rightarrow$ Submits corrective commit c48fe19, passes 20/20 tests, resolves BUG-024, unlocks promotion to Production.
+3. Click **"Reset State"** $\rightarrow$ Restores clean baseline database.

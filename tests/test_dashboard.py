@@ -61,3 +61,71 @@ def test_csv_export(client):
     assert resp.status_code == 200
     assert resp.mimetype == "text/csv"
     assert b"CI ID,Configuration Item Name,Version" in resp.data
+
+def test_team_page_renders_four_developers(client):
+    with client.session_transaction() as sess:
+        sess["user"] = "prakash"
+        sess["role"] = "admin"
+    resp = client.get("/team")
+    assert resp.status_code == 200
+    assert b"Prakash Raj" in resp.data
+    assert b"Bharathwaraj" in resp.data
+    assert b"Karthik" in resp.data
+    assert b"Divya" in resp.data
+
+def test_build_details_and_failure_investigation(client):
+    with client.session_transaction() as sess:
+        sess["user"] = "karthik"
+        sess["role"] = "maintainer"
+    
+    # Check Build #128 Details
+    resp_bld = client.get("/builds/128")
+    assert resp_bld.status_code == 200
+    assert b"Build #128 Details" in resp_bld.data
+    assert b"feature/reports" in resp_bld.data
+
+    # Check Failure Investigation #128
+    resp_fail = client.get("/failures/128")
+    assert resp_fail.status_code == 200
+    assert b"BUG-024" in resp_fail.data
+    assert b"ReportServiceTest" in resp_fail.data
+    assert b"Karthik" in resp_fail.data
+    assert b"Root Cause" in resp_fail.data
+
+def test_alerts_center(client):
+    with client.session_transaction() as sess:
+        sess["user"] = "prakash"
+        sess["role"] = "admin"
+    resp = client.get("/alerts")
+    assert resp.status_code == 200
+    assert b"Alerts & Notification Center" in resp.data
+
+def test_end_to_end_demo_workflow(client):
+    with client.session_transaction() as sess:
+        sess["user"] = "prakash"
+        sess["role"] = "admin"
+
+    # 1. Trigger Failure
+    resp_fail = client.get("/api/demo/run-failure", follow_redirects=True)
+    assert resp_fail.status_code == 200
+    assert b"BUG-024" in resp_fail.data
+
+    # 2. Trigger Fix
+    resp_fix = client.get("/api/demo/run-fix", follow_redirects=True)
+    assert resp_fix.status_code == 200
+    assert b"Build #129 Details" in resp_fix.data
+
+def test_webhook_ingest_build(client):
+    payload = {
+        "build_no": 999,
+        "result": "SUCCESS",
+        "branch": "feature/employee",
+        "commit_hash": "abc999",
+        "author": "Prakash Raj",
+        "duration": 22.4,
+        "message": "Webhook test commit"
+    }
+    resp = client.post("/api/builds", json=payload)
+    assert resp.status_code == 201
+    assert resp.json["status"] == "recorded"
+

@@ -1,5 +1,5 @@
 -- CommitSleuth Relational Schema for Software Configuration Management
--- Compatible with SQLite3 and supports all 9 SCM Activities
+-- Compatible with SQLite3 and supports all SCM Activities
 
 CREATE TABLE IF NOT EXISTS users (
     username TEXT PRIMARY KEY,
@@ -7,6 +7,19 @@ CREATE TABLE IF NOT EXISTS users (
     role TEXT NOT NULL CHECK(role IN ('admin', 'maintainer', 'viewer')),
     full_name TEXT NOT NULL,
     email TEXT
+);
+
+CREATE TABLE IF NOT EXISTS developers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    username TEXT NOT NULL UNIQUE,
+    github_username TEXT NOT NULL,
+    email TEXT NOT NULL,
+    role TEXT NOT NULL,
+    module TEXT NOT NULL,
+    branch TEXT NOT NULL,
+    avatar_color TEXT DEFAULT '#3b82f6',
+    last_commit_time TEXT
 );
 
 CREATE TABLE IF NOT EXISTS ci_register (
@@ -40,14 +53,22 @@ CREATE TABLE IF NOT EXISTS change_requests (
 CREATE TABLE IF NOT EXISTS builds (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     build_no INTEGER NOT NULL UNIQUE,
-    result TEXT NOT NULL CHECK(result IN ('SUCCESS', 'FAILURE', 'UNSTABLE')),
+    result TEXT NOT NULL CHECK(result IN ('SUCCESS', 'FAILURE', 'UNSTABLE', 'ABORTED', 'RUNNING')),
     commit_hash TEXT NOT NULL,
     branch TEXT DEFAULT 'main',
     failure_type TEXT DEFAULT 'None',
     test_summary TEXT,
     duration_sec REAL DEFAULT 0.0,
     log_path TEXT,
-    created TEXT NOT NULL
+    created TEXT NOT NULL,
+    author TEXT DEFAULT 'Prakash Raj',
+    commit_message TEXT DEFAULT 'Routine update',
+    trigger_type TEXT DEFAULT 'GitHub Push',
+    failed_stage TEXT DEFAULT 'None',
+    tests_total INTEGER DEFAULT 20,
+    tests_failed INTEGER DEFAULT 0,
+    tests_passed INTEGER DEFAULT 20,
+    job_name TEXT DEFAULT 'backend/report-service'
 );
 
 CREATE TABLE IF NOT EXISTS problems (
@@ -61,11 +82,35 @@ CREATE TABLE IF NOT EXISTS problems (
     confidence REAL DEFAULT 0.0,
     attribution_status TEXT DEFAULT 'Probable Cause',
     assignee TEXT NOT NULL,
-    status TEXT NOT NULL CHECK(status IN ('Open', 'Assigned', 'Fixed', 'Verified', 'Closed')),
+    status TEXT NOT NULL CHECK(status IN ('Open', 'Investigating', 'Assigned', 'Fix Submitted', 'Verification Pending', 'Fixed', 'Verified', 'Closed', 'Resolved')),
     action TEXT,
     notification TEXT,
     created TEXT NOT NULL,
     resolved_date TEXT,
+    title TEXT,
+    description TEXT,
+    root_cause_category TEXT DEFAULT 'Logic Error',
+    corrective_action TEXT,
+    corrective_commit TEXT,
+    verification_build INTEGER,
+    closure_notes TEXT,
+    FOREIGN KEY(build_no) REFERENCES builds(build_no)
+);
+
+CREATE TABLE IF NOT EXISTS alerts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    alert_code TEXT UNIQUE,
+    build_no INTEGER NOT NULL,
+    developer TEXT NOT NULL,
+    severity TEXT NOT NULL CHECK(severity IN ('Critical', 'High', 'Medium', 'Low')),
+    notification_type TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    acknowledged INTEGER DEFAULT 0,
+    acknowledged_by TEXT,
+    acknowledged_at TEXT,
+    problem_code TEXT,
+    status TEXT DEFAULT 'Unread',
     FOREIGN KEY(build_no) REFERENCES builds(build_no)
 );
 
