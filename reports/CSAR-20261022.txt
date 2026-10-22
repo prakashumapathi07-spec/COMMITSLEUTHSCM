@@ -4,8 +4,8 @@
 Report ID        : CSAR-FINAL-REVIEW-001
 Project          : CommitSleuth — Intelligent CI Failure Attribution
 Course           : ISWE403L — Software Configuration Management
-Generated At     : 22 Oct 2026, 13:09:29 (via status_reporter.py)
-Source Branch    : develop @ f0ad7d0
+Generated At     : 22 Oct 2026, 13:27:55 (via status_reporter.py)
+Source Branch    : main @ 3f7bb11
 ------------------------------------------------------------------------
 1. CONFIGURATION ITEM (CI) STATUS ACCOUNTING
    Total CIs under Control      : 20
@@ -21,22 +21,22 @@ Source Branch    : develop @ f0ad7d0
    • Rejected                   : 1
 ------------------------------------------------------------------------
 3. CI/CD PIPELINE & QUALITY VERIFICATION
-   Total Recorded Builds        : 0
-   • Successful Builds          : 0
-   • Failed Builds              : 0
+   Total Recorded Builds        : 3
+   • Successful Builds          : 2
+   • Failed Builds              : 1
    • Unstable Builds            : 0
 ------------------------------------------------------------------------
 4. PROBLEM TRACKING & FAILURE ATTRIBUTION
-   Total Problems Tracked       : 0
+   Total Problems Tracked       : 1
    • Open / Investigating       : 0
    • Fixed & Verified           : 0
-   • Closed                     : 0
+   • Closed                     : 1
 ------------------------------------------------------------------------
 5. PROMOTIONAL MANAGEMENT & RELEASES
-   Total Promotion Decisions    : 6
-   • PASSED (Promoted)          : 5
-   • BLOCKED (Quality Gate)     : 1
-   Git Release Tags             : v0.1.0, v0.2.0
+   Total Promotion Decisions    : 16
+   • PASSED (Promoted)          : 9
+   • BLOCKED (Quality Gate)     : 7
+   Git Release Tags             : v0.1.0, v0.2.0, v1.0.0
 ------------------------------------------------------------------------
 6. CONFIGURATION AUDITING SYSTEM (CAS) OBSERVATIONS
    Total Audit Observations     : 7
