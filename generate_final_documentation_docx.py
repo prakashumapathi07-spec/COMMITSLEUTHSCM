@@ -311,22 +311,6 @@ def generate_documentation_docx():
         space_after=8
     )
 
-    # Dynamic TOC XML block
-    p_toc = doc.add_paragraph()
-    run_toc = p_toc.add_run()
-    fldChar1 = OxmlElement('w:fldChar')
-    fldChar1.set(qn('w:fldCharType'), 'begin')
-    instrText = OxmlElement('w:instrText')
-    instrText.set(qn('xml:space'), 'preserve')
-    instrText.text = 'TOC \\o "1-3" \\h \\z \\u'
-    fldChar2 = OxmlElement('w:fldChar')
-    fldChar2.set(qn('w:fldCharType'), 'separate')
-    fldChar3 = OxmlElement('w:fldChar')
-    fldChar3.set(qn('w:fldCharType'), 'end')
-    p_toc._p.append(fldChar1)
-    p_toc._p.append(instrText)
-    p_toc._p.append(fldChar2)
-    p_toc._p.append(fldChar3)
 
     # Static Fallback Outline for immediate visual rendering
     toc_outline = [
