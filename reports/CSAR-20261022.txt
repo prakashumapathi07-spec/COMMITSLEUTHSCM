@@ -4,8 +4,8 @@
 Report ID        : CSAR-FINAL-REVIEW-001
 Project          : CommitSleuth — Intelligent CI Failure Attribution
 Course           : ISWE403L — Software Configuration Management
-Generated At     : 22 Oct 2026, 13:27:55 (via status_reporter.py)
-Source Branch    : main @ 3f7bb11
+Generated At     : 22 Oct 2026, 14:40:48 (via status_reporter.py)
+Source Branch    : main @ 7e43c78
 ------------------------------------------------------------------------
 1. CONFIGURATION ITEM (CI) STATUS ACCOUNTING
    Total CIs under Control      : 20
@@ -14,8 +14,8 @@ Source Branch    : main @ 3f7bb11
    • Planned / Pending          : 0 (0%)
 ------------------------------------------------------------------------
 2. CHANGE MANAGEMENT METRICS
-   Total Change Requests Raised : 9
-   • Implemented / Verified     : 8
+   Total Change Requests Raised : 14
+   • Implemented / Verified     : 13
    • Approved (Pending Release) : 0
    • Under Review (CCB)         : 0
    • Rejected                   : 1
@@ -27,20 +27,20 @@ Source Branch    : main @ 3f7bb11
    • Unstable Builds            : 0
 ------------------------------------------------------------------------
 4. PROBLEM TRACKING & FAILURE ATTRIBUTION
-   Total Problems Tracked       : 1
+   Total Problems Tracked       : 2
    • Open / Investigating       : 0
    • Fixed & Verified           : 0
-   • Closed                     : 1
+   • Closed                     : 2
 ------------------------------------------------------------------------
 5. PROMOTIONAL MANAGEMENT & RELEASES
-   Total Promotion Decisions    : 16
-   • PASSED (Promoted)          : 9
-   • BLOCKED (Quality Gate)     : 7
+   Total Promotion Decisions    : 35
+   • PASSED (Promoted)          : 19
+   • BLOCKED (Quality Gate)     : 16
    Git Release Tags             : v0.1.0, v0.2.0, v1.0.0
 ------------------------------------------------------------------------
 6. CONFIGURATION AUDITING SYSTEM (CAS) OBSERVATIONS
-   Total Audit Observations     : 7
-   • Closed Observations        : 7
+   Total Audit Observations     : 14
+   • Closed Observations        : 14
    • Open / In-Progress         : 0
 ========================================================================
 End of Configuration Status Accounting Report.
