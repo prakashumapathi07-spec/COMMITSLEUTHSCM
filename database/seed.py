@@ -29,8 +29,9 @@ def seed():
     users = [
         ("prakash", generate_password_hash("admin123"), "admin", "Prakash Raj U (23MIS0180)", "23mis0180@vitstudent.ac.in"),
         ("bharath", generate_password_hash("admin123"), "admin", "Bharathwaraj K S (23MIS0070)", "23mis0070@vitstudent.ac.in"),
+        ("arun", generate_password_hash("maint123"), "maintainer", "Arun Kumar (23MIS0245)", "arun.kumar2026@vitstudent.ac.in"),
+        ("kavya", generate_password_hash("maint123"), "maintainer", "Kavya Sharma (23MIS0310)", "kavya.sharma2026@vitstudent.ac.in"),
         ("admin", generate_password_hash("admin123"), "admin", "Administrator", "admin@commitsleuth.org"),
-        ("maintainer", generate_password_hash("maint123"), "maintainer", "Lead Maintainer", "maintainer@commitsleuth.org"),
         ("viewer", generate_password_hash("viewer123"), "viewer", "SCM Reviewer / Auditor", "reviewer@vit.ac.in")
     ]
     con.executemany("INSERT OR REPLACE INTO users VALUES (?,?,?,?,?)", users)

@@ -607,12 +607,18 @@ def login():
                 <button type="submit" class="btn" style="width: 100%; justify-content: center; padding: 10px;">Sign In to SCM Portal</button>
             </form>
             <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-dim); font-size: 12px; color: var(--text-muted);">
-                <div style="font-weight: 600; color: #fff; margin-bottom: 6px;">Evaluation Demonstration Accounts:</div>
+                <div style="font-weight: 600; color: #fff; margin-bottom: 6px;">Evaluation Demonstration Accounts (4-Member SCM Team):</div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                    <span><b>Administrator:</b> prakash</span> <code>admin123</code>
+                    <span><b>Admin (Author):</b> prakash</span> <code>admin123</code>
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                    <span><b>Administrator:</b> bharath</span> <code>admin123</code>
+                    <span><b>Admin (Lead):</b> bharath</span> <code>admin123</code>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span><b>Maintainer (DevOps):</b> arun</span> <code>maint123</code>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span><b>Maintainer (QA):</b> kavya</span> <code>maint123</code>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span><b>Auditor / Viewer:</b> viewer</span> <code>viewer123</code>
