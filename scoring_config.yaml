@@ -1,8 +1,9 @@
 # CommitSleuth scoring configuration (CI: scoring_config.yaml)
+# Tuned for multi-developer collaborative batch triage by Arun Kumar (23MIS0245)
 weights:
-  file_match: 0.50     # commit changed a file named in the failure log
+  file_match: 0.55     # commit changed a file named in the failure log
   pom_change: 0.25     # pom.xml changed and failure is a dependency problem
-  recency: 0.15        # newer commits score slightly higher
+  recency: 0.10        # newer commits score slightly higher
   change_size: 0.10    # larger commits are slightly more suspicious
 rollback:
   confidence_threshold: 0.60
