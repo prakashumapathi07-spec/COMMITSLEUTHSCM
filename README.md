@@ -1,1 +1,1 @@
-# CommitSleuth
+# CommitSleuthCommitSleuth SCM project

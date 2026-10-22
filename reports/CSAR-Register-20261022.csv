@@ -1,0 +1,21 @@
+CI ID,Configuration Item Name,Version,Lifecycle Status,Owner,Approval Status,Baseline,Category,Last Modified
+CSBLD01,Jenkinsfile,v1.0,"Tested, Baselined (BL-03)",Bharathwaraj K S,Approved,BL-03,Build & CI,2026-09-02
+CSBLD02,Maven Configuration (pom.xml),v1.0,"Tested, Baselined (BL-03)",Bharathwaraj K S,Approved,BL-03,Build & CI,2026-09-02
+CSDB01,Database (build history and reports),v1.0,Baselined (BL-02),Prakash Raj U,Approved,BL-02,Database,2026-10-22
+CSDOC01,Project Proposal,v1.0,Baselined (BL-01),Bharathwaraj K S,Approved,BL-01,Documentation,2026-08-07
+CSDOC02,Software Requirement Specification (SRS),v1.0,Baselined (BL-01),Prakash Raj U,Approved,BL-01,Documentation,2026-08-12
+CSDOC03,Software Configuration Management Plan,v1.0,Baselined (BL-01),Bharathwaraj K S,Approved,BL-01,Documentation,2026-08-14
+CSDOC04,System Design Document,v1.0,Baselined (BL-02),Prakash Raj U,Approved,BL-02,Documentation,2026-09-04
+CSDOC05,Test Plan,v1.0,Baselined (BL-05),Bharathwaraj K S,Approved,BL-05,Documentation,2026-10-22
+CSDOC06,Test Cases,v1.0,Baselined (BL-05),Prakash Raj U,Approved,BL-05,Documentation,2026-10-22
+CSDOC07,User Manual,v1.0,Baselined (BL-05),Prakash Raj U,Approved,BL-05,Documentation,2026-10-22
+CSDOC08,Deployment Guide,v1.0,Baselined (BL-05),Bharathwaraj K S,Approved,BL-05,Documentation,2026-10-22
+CSMOD01,Build Log Parser,v1.0,Baselined (BL-04),Bharathwaraj K S,Approved,BL-04,Core Module,2026-10-22
+CSMOD02,pom.xml Diff Analyzer,v1.0,Baselined (BL-04),Prakash Raj U,Approved,BL-04,Core Module,2026-10-22
+CSMOD03,Commit Ranking Engine,v1.0,Baselined (BL-04),Prakash Raj U,Approved,BL-04,Core Module,2026-10-22
+CSMOD04,Notification Module,v1.0,Baselined (BL-04),Bharathwaraj K S,Approved,BL-04,Core Module,2026-10-22
+CSMOD05,Rollback Recommendation Module,v1.0,Baselined (BL-04),Prakash Raj U,Approved,BL-04,Core Module,2026-10-22
+CSMOD06,Dashboard Module,v1.0,Baselined (BL-05),Prakash Raj U,Approved,BL-05,Core Module,2026-10-22
+CSREL01,Release Package (CommitSleuth_v1.0),v1.0.0,Baselined (BL-05),Bharathwaraj K S,Approved,BL-05,Release,2026-10-22
+CSSRC01,Source Code (Python modules),v1.0.0,Baselined (BL-04),Prakash Raj U,Approved,BL-04,Source Code,2026-10-22
+CSSRC02,Git Repository,v1.0.0,Baselined (BL-02),Bharathwaraj K S,Approved,BL-02,Repository,2026-10-22
