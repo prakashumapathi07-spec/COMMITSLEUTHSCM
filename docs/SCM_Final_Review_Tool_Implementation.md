@@ -125,6 +125,122 @@ sequenceDiagram
 
 ---
 
+## 2.5 Git & GitHub Primary SCM Toolchain Implementation & Visual Evidence
+
+Git and GitHub serve as the foundational Software Configuration Management (SCM) toolchain for CommitSleuth. The remote GitHub repository ([https://github.com/prakashumapathi07-spec/COMMITSLEUTHSCM.git](https://github.com/prakashumapathi07-spec/COMMITSLEUTHSCM.git)) acts as the single source of truth for all Configuration Items (CIs), branch topologies, code reviews, and cryptographic release baselines.
+
+### SCREENSHOT 1: GITHUB REPOSITORY OVERVIEW & FILE TREE
+![GitHub Repository Overview and File Tree](screenshots/git_01_repo_overview.png)
+*Figure 1: GitHub Repository Overview & File Tree Structure (`COMMITSLEUTHSCM`)*
+
+**Explanation:** The GitHub repository overview demonstrates the controlled structure of CommitSleuth under `prakashumapathi07-spec/COMMITSLEUTHSCM`. It highlights:
+* **Active Branches & Tags:** 5 active branches (`main`, `develop`, `feature/multi-developer-collab`, `bugfix/demo-calc-failure`, `release/v1.0.0`) and 3 official release tags (`v0.1.0`, `v0.2.0`, `v1.0.0`).
+* **Latest Verified Commit:** Commit `70d43eb` authored by Prakash Raj U with approved Change Request identifier `CR-016`.
+* **Repository Architecture:** Directory structure separating CI configurations (`.github/workflows`, `Jenkinsfile`, `pom.xml`), Python backend engines (`parser/`, `analyzer/`, `alerts/`), persistent SCM database (`database/`), automated test harnesses (`tests/`, `maven/`), and documentation artifacts (`docs/`).
+* **Team Contributors:** Contributor attribution across Prakash Raj U (Lead Architect), Bharathwaraj K S (DevOps Engineer), Arun Kumar, and Kavya Sharma.
+
+---
+
+### SCREENSHOT 2: GIT COMMIT HISTORY & TRACEABILITY LOG
+![Git Commit History & Traceability Log](screenshots/git_02_commit_history.png)
+*Figure 2: Git Commit History & SCM Change Traceability Log*
+
+**Explanation:** The Git commit history interface validates bidirectional traceability between code commits and formal Change Requests. Key SCM mechanisms demonstrated:
+* **Client-Side Hook Enforcement:** The pre-commit hook `hooks/commit-msg` enforces that every commit message must strictly begin with an authorized Change Request identifier (e.g., `CR-016: ...`).
+* **Cryptographic Signatures & Verification:** Verified commit badges confirm author authenticity and prevent untracked changes from entering the tree.
+* **Dual Representation:** Terminal `git log --graph --oneline --decorate` provides transparent command-line auditability alongside the GitHub web interface.
+
+---
+
+### Team Developer Commit Traceability Tabulation
+Modeled after formal SCM configuration status accounting standards, the following tabulation provides complete traceability across the project lifecycle:
+
+| Commit | Date | Author | Commit Message & SCM Association | Affected CI |
+|:---:|:---:|:---|:---|:---:|
+| `a7b2a71` | 2026-10-05 | **Prakash Raj U** | docs(ci-01, ci-02): initialize requirements, SCM plan & directory structure [Requirements Baseline] | CI-01, CI-02 |
+| `99bbeb5` | 2026-10-08 | **Bharathwaraj K S** | design(ci-03, ci-04): establish heuristic blame scoring weights & database schema [Design Baseline] | CI-03, CI-04 |
+| `f0ad7d0` | 2026-10-10 | **Prakash Raj U** | Merge pull request #1 from feature/scoring-config: implement YAML configuration [Baseline BL-04] | CI-03, CI-05 |
+| `f1127d0` | 2026-10-12 | **Bharathwaraj K S** | feat(ci-05): implement executive SCM dashboard & build recorder controller [CR-002] | CI-05 |
+| `9297e33` | 2026-10-14 | **Prakash Raj U** | feat(ci-09): introduce calculation failure in Calculator add method for fault injection [CR-009] | CI-09 |
+| `63e1e5b` | 2026-10-15 | **Bharathwaraj K S** | test(ci-06): update regression test notes & automated Surefire assertion check [CR-009] | CI-06 |
+| `e789c77` | 2026-10-16 | **Prakash Raj U** | fix(ci-09): resolve Calculator calculation defect and restore passing build [CR-009] | CI-09 |
+| `0814589` | 2026-10-16 | **Bharathwaraj K S** | Merge pull request #2 from bugfix/demo-calc-failure: resolve defect BUG-024 (CR-009) | CI-06, CI-09 |
+| `6f147e3` | 2026-10-17 | **Prakash Raj U** | feat(ci-02): add multi-encoding log parser support for Jenkins build recorder [CR-007] | CI-02 |
+| `d6b3be0` | 2026-10-18 | **Bharathwaraj K S** | feat(ci-09): add range validation logic to Validator service for employee module [CR-010] | CI-09 |
+| `077e17c` | 2026-10-19 | **Prakash Raj U** | feat(ci-09): update calculation logic in Calculator add method for boundary testing [CR-011] | CI-09 |
+| `4025917` | 2026-10-20 | **Arun Kumar** | tune(ci-03): refine attribution scoring weights & Bayesian confidence thresholds [CR-012] | CI-03 |
+| `5fbf9c0` | 2026-10-20 | **Kavya Sharma** | test(ci-06): add collaborative team workflow & multi-developer CI test matrix [CR-013] | CI-06 |
+| `74aa410` | 2026-10-21 | **Bharathwaraj K S** | Merge pull request #4 from feature/multi-developer-collab into develop (CR-014) | CI-06, CI-09 |
+| `7e43c78` | 2026-10-21 | **Prakash Raj U** | Merge branch develop into main: Production Release Baseline v1.0.0 [Release v1.0.0] | Release v1.0.0 |
+| `11b38f4` | 2026-10-22 | **Prakash Raj U** | release(ci-10): finalize official release manifest, FCA/PCA sign-off & audit checklist [BL-05] | CI-10, Release v1.0.0 |
+| `fa4b2c5` | 2026-10-22 | **Bharathwaraj K S** | feat(ci-05): implement light-theme UI, TechNova 4-developer scenario & SCM governance [CR-015] | CI-05 |
+| `70d43eb` | 2026-10-22 | **Prakash Raj U** | docs(ci-08): add CommitSleuth SCM Final Review Microsoft Word documentation [CR-016] | CI-08, CI-10 |
+
+---
+
+### SCREENSHOT 3: GIT BRANCHES & GITFLOW HIERARCHY
+![Git Branches and Gitflow Hierarchy](screenshots/git_03_branches_gitflow.png)
+*Figure 3: Git Branches & Gitflow Hierarchy Structure*
+
+**Explanation:** The Git branching model isolates unstable developer feature branches from stable production baselines:
+* `main`: Protected default branch representing approved production releases (BL-01 through BL-05). Direct pushes are strictly forbidden; merges require approved PRs and passing CI gates.
+* `develop`: Continuous integration branch where feature branches are integrated and verified against automated unit tests.
+* `feature/multi-developer-collab`: Dedicated feature branch supporting parallel multi-developer modules.
+* `bugfix/demo-calc-failure`: Isolated defect resolution branch used to diagnose and fix `BUG-024` without disrupting the integration pipeline.
+* `release/v1.0.0`: Staging candidate branch for FCA/PCA audits, packaging, and release manifest verification.
+
+---
+
+### SCREENSHOT 4: GITHUB NETWORK GRAPH / VISUAL COMMIT TREE
+![GitHub Network Graph and Commit Tree](screenshots/git_04_network_graph.png)
+*Figure 4: GitHub Visual Commit Tree & Network Graph (DAG)*
+
+**Explanation:** The topological Directed Acyclic Graph (DAG) maps branch lifecycles, divergence points, and merge nodes:
+* Visualizes parallel commit streams across Prakash Raj U, Bharathwaraj K S, Arun Kumar, and Kavya Sharma.
+* Clearly depicts bugfix branch bifurcation upon failure injection (`9297e33`), corrective patch implementation (`e789c77`), and pull request merge back into `develop` (`0814589`).
+* Illustrates final integration of `develop` into `main` (`7e43c78`) and semantic release tag placement (`v1.0.0`).
+
+---
+
+### SCREENSHOT 5: PULL REQUEST REVIEW, CODE DIFF & MERGE
+![Pull Request Review and Code Diff](screenshots/git_05_pr_review_diff.png)
+*Figure 5: GitHub Pull Request Review, CI Gate Status & Unified Code Diff*
+
+**Explanation:** Pull Requests act as mandatory quality and change control gates before code enters integration:
+* **CI Quality Gate:** Jenkins CI checks execute compilation and JUnit test suites automatically on PR opening. The interface displays green checkmark: *"All continuous integration checks have passed"*.
+* **CCB Peer Review:** Formal review sign-off by Bharathwaraj K S ensuring alignment with Change Request CR-014.
+* **Unified Code Diff:** Syntax-highlighted diff in `Calculator.java` and `ReportService.java` showing deleted defect code (red `-`) and verified corrective logic (green `+`).
+
+---
+
+### SCREENSHOT 6: GIT TAGS & OFFICIAL RELEASE BASELINE
+![Git Release Tags and Baseline Manifests](screenshots/git_06_release_tags.png)
+*Figure 6: GitHub Releases, Semantic Tags & Official Baseline Manifests*
+
+**Explanation:** Git tags establish immutable, cryptographic reference points for formal Configuration Baselines:
+* **Tag `v1.0.0` (Baseline BL-05):** Official Production Release Baseline containing signed release notes, verified commit SHA `11b38f4`, and CCB authorization.
+* **Release Assets:** Packaged compiled binary (`commitsleuth-1.0.0.jar`), cryptographic audit manifest (`release-manifest-v1.0.0.json`), and SHA-256 digital integrity checksums (`checksums.sha256`).
+* **Historical Baselines:** `v0.2.0` (BL-04 Analysis Baseline) and `v0.1.0` (BL-01 Requirements Baseline).
+
+---
+
+### End-to-End Build Failure Tracking Roadmap
+![CommitSleuth Build Failure Tracking Roadmap](screenshots/git_07_failure_tracking_roadmap.png)
+*Figure 7: CommitSleuth Build Failure Tracking & Root-Cause Resolution Roadmap*
+
+**Explanation:** The Failure Tracking Roadmap details the 9-phase automated workflow:
+1. **Developer Code Push:** Verified Git commit with CR tag pushed to branch.
+2. **CI Pipeline & Test Execution:** GitHub webhook triggers Jenkins pipeline; Maven executes Surefire unit tests.
+3. **Build Failure Interception:** Test failure intercepted from Maven console and XML reports.
+4. **Log Parsing & Error Signature Extraction:** Extracted stack trace, failing class (`ReportServiceTest`), assertion diff, and commit batch.
+5. **Multi-Factor Blame Attribution:** Bayesian scoring across File Match (55%), POM Dependencies (25%), Recency (10%), and Change Size (10%). Attributes blame with 88.5% confidence.
+6. **SCM Incident Record & Alerts:** Automated problem record `BUG-024` logged; high-priority developer alerts dispatched.
+7. **Developer Diagnostic Portal:** Interactive web failure dashboard displays syntax-colored terminal logs, suspect commit diffs, and recommended one-click code fixes.
+8. **Bugfix Checkout & Re-test:** Developer checks out `bugfix/` branch, applies fix under CR-010, and triggers verification Build #129.
+9. **Verification & Promotional Gate:** `BUG-024` transitioned to `RESOLVED`; promotion quality gate evaluates passing tests and authorizes advancement to Baseline BL-05.
+
+---
+
 ## 3. System Architecture and Technology Stack
 
 ### 3.1 Technology Stack

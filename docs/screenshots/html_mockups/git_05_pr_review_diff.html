@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
+body { background: #ffffff; color: #1f2328; font-size: 14px; line-height: 1.5; }
+.gh-header { background: #f6f8fa; border-bottom: 1px solid #d0d7de; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.gh-repo-title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #0969da; }
+.gh-badge { font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 12px; border: 1px solid #d0d7de; color: #656d76; background: #ffffff; }
+.gh-nav { display: flex; gap: 24px; border-bottom: 1px solid #d0d7de; padding: 0 32px; background: #f6f8fa; }
+.gh-nav-item { padding: 12px 4px; font-weight: 500; color: #656d76; text-decoration: none; display: flex; align-items: center; gap: 6px; border-bottom: 2px solid transparent; }
+.gh-nav-item.active { color: #1f2328; font-weight: 600; border-bottom-color: #fd8c73; }
+.gh-counter { background: rgba(175,184,193,0.2); padding: 2px 6px; border-radius: 10px; font-size: 12px; }
+.container { max-width: 1280px; margin: 24px auto; padding: 0 24px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 13px; font-weight: 600; border-radius: 6px; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; cursor: pointer; }
+.btn-primary { background: #1f883d; color: #ffffff; border-color: rgba(31,35,40,0.15); }
+.badge-purple { background: #8250df; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-green { background: #1a7f37; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-blue { background: #0969da; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+
+.pr-header { border-bottom: 1px solid #d0d7de; padding-bottom: 16px; margin-bottom: 20px; }
+.pr-status-bar { display: flex; align-items: center; gap: 12px; font-size: 14px; margin-top: 10px; color: #656d76; }
+.diff-box { border: 1px solid #d0d7de; border-radius: 6px; overflow: hidden; margin-top: 16px; font-family: ui-monospace, monospace; font-size: 13px; }
+.diff-header { background: #f6f8fa; padding: 10px 16px; font-weight: 600; font-size: 13px; border-bottom: 1px solid #d0d7de; display: flex; justify-content: space-between; }
+.diff-line { padding: 3px 16px; white-space: pre; }
+.diff-del { background: #ffebe9; color: #cf222e; }
+.diff-add { background: #e6ffec; color: #1a7f37; }
+.diff-ctx { background: #ffffff; color: #656d76; }
+.ci-check-box { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 16px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+</style>
+</head>
+<body>
+<div class="gh-header">
+  <div class="gh-repo-title">
+    <span>prakashumapathi07-spec</span> / <strong style="color: #0969da;">COMMITSLEUTHSCM</strong>
+    <span class="gh-badge">Public</span>
+  </div>
+  <div style="font-size: 13px; color: #656d76;">Pull Requests ➔ <strong>#4</strong></div>
+</div>
+
+<div class="container">
+  <div class="pr-header">
+    <h1 style="font-size: 24px; font-weight: 600; color: #1f2328;">CR-014: Multi-Developer Collaborative Integration & Calculation Fix <span style="color: #656d76; font-weight: 400;">#4</span></h1>
+    <div class="pr-status-bar">
+      <span class="badge-purple" style="font-size: 13px; padding: 4px 12px;">Merged</span>
+      <span><strong>Prakash Raj U</strong> merged 5 commits into <code style="background: #e0f2fe; padding: 2px 6px; border-radius: 4px; color: #0369a1;">develop</code> from <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #475569;">feature/multi-developer-collab</code></span>
+    </div>
+  </div>
+
+  <div class="ci-check-box">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="width: 32px; height: 32px; border-radius: 50%; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;">✓</div>
+      <div>
+        <div style="font-weight: 600; color: #1f2328;">All continuous integration checks have passed</div>
+        <div style="font-size: 12px; color: #656d76;">1 successful check (Jenkins CI Pipeline / maven-verify-and-test) — CommitSleuth Attribution 0 defects</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <span class="badge-green">Approved by Bharathwaraj K S (CCB)</span>
+    </div>
+  </div>
+
+  <div class="diff-box">
+    <div class="diff-header">
+      <span>📄 maven/src/main/java/com/commitsleuth/demo/Calculator.java</span>
+      <span style="color: #1a7f37;">+3 lines / -2 lines</span>
+    </div>
+    <div class="diff-line diff-ctx">@@ -14,6 +14,7 @@ public class Calculator {</div>
+    <div class="diff-line diff-ctx">     public int add(int a, int b) {</div>
+    <div class="diff-line diff-del">-        // Intentional defect introduced in candidate commit</div>
+    <div class="diff-line diff-del">-        return a + b + 5; // Causes JUnit test assertion failure</div>
+    <div class="diff-line diff-add">+        // Corrected calculation logic approved under CR-014</div>
+    <div class="diff-line diff-add">+        return a + b; // Verified clean calculation</div>
+    <div class="diff-line diff-ctx">     }</div>
+    <div class="diff-line diff-ctx"> </div>
+    <div class="diff-line diff-ctx">     public int subtract(int a, int b) {</div>
+  </div>
+
+  <div class="diff-box">
+    <div class="diff-header">
+      <span>📄 maven/src/main/java/com/commitsleuth/demo/ReportService.java</span>
+      <span style="color: #1a7f37;">+5 lines / -1 line</span>
+    </div>
+    <div class="diff-line diff-ctx">@@ -42,7 +42,11 @@ public class ReportService {</div>
+    <div class="diff-line diff-ctx">     public double calculateMonthlyExpenses(List&lt;Double&gt; expenses) {</div>
+    <div class="diff-line diff-del">-        return expenses.stream().mapToDouble(Double::doubleValue).sum() * 1.15;</div>
+    <div class="diff-line diff-add">+        if (expenses == null || expenses.isEmpty()) {</div>
+    <div class="diff-line diff-add">+            return 0.0;</div>
+    <div class="diff-line diff-add">+        }</div>
+    <div class="diff-line diff-add">+        // Accurate unweighted sum verified against TestReportService</div>
+    <div class="diff-line diff-add">+        return expenses.stream().mapToDouble(Double::doubleValue).sum();</div>
+    <div class="diff-line diff-ctx">     }</div>
+  </div>
+</div>
+</body>
+</html>

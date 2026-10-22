@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
+body { background: #ffffff; color: #1f2328; font-size: 14px; line-height: 1.5; }
+.gh-header { background: #f6f8fa; border-bottom: 1px solid #d0d7de; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.gh-repo-title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #0969da; }
+.gh-badge { font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 12px; border: 1px solid #d0d7de; color: #656d76; background: #ffffff; }
+.gh-nav { display: flex; gap: 24px; border-bottom: 1px solid #d0d7de; padding: 0 32px; background: #f6f8fa; }
+.gh-nav-item { padding: 12px 4px; font-weight: 500; color: #656d76; text-decoration: none; display: flex; align-items: center; gap: 6px; border-bottom: 2px solid transparent; }
+.gh-nav-item.active { color: #1f2328; font-weight: 600; border-bottom-color: #fd8c73; }
+.gh-counter { background: rgba(175,184,193,0.2); padding: 2px 6px; border-radius: 10px; font-size: 12px; }
+.container { max-width: 1280px; margin: 24px auto; padding: 0 24px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 13px; font-weight: 600; border-radius: 6px; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; cursor: pointer; }
+.btn-primary { background: #1f883d; color: #ffffff; border-color: rgba(31,35,40,0.15); }
+.badge-purple { background: #8250df; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-green { background: #1a7f37; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-blue { background: #0969da; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+
+.branch-card { border: 1px solid #d0d7de; border-radius: 6px; padding: 14px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; background: #ffffff; }
+.branch-name { font-family: ui-monospace, monospace; font-size: 14px; font-weight: 600; color: #0969da; display: flex; align-items: center; gap: 8px; }
+.branch-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+.gitflow-diag { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 20px; margin-top: 24px; }
+.lane { display: flex; align-items: center; margin-bottom: 14px; }
+.lane-label { width: 140px; font-weight: 600; font-size: 13px; font-family: monospace; }
+.lane-track { flex: 1; height: 32px; border-radius: 16px; display: flex; align-items: center; padding: 0 16px; gap: 14px; position: relative; }
+.lane-node { width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 3px solid; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="gh-header">
+  <div class="gh-repo-title">
+    <span>prakashumapathi07-spec</span> / <strong style="color: #0969da;">COMMITSLEUTHSCM</strong>
+    <span class="gh-badge">Public</span>
+  </div>
+  <div style="font-size: 13px; color: #656d76;">Branch Management & Gitflow Hierarchy</div>
+</div>
+
+<div class="container">
+  <div style="margin-bottom: 16px;">
+    <h2 style="font-size: 20px; font-weight: 600;">Repository Branches (5 Active Branches)</h2>
+    <div style="font-size: 13px; color: #656d76;">Strict branching strategy isolating stable production releases from active integration and bugfix efforts.</div>
+  </div>
+
+  <div class="branch-card" style="border-left: 4px solid #1a7f37;">
+    <div>
+      <div class="branch-name">🌿 main <span class="badge-green branch-badge">Default / Protected</span></div>
+      <div style="font-size: 12px; color: #656d76; margin-top: 4px;">Production Baseline (BL-05). Only merges via approved Pull Requests and CCB sign-off.</div>
+    </div>
+    <div style="text-align: right; font-size: 12px; color: #656d76;">
+      <div>Updated 2 hours ago by <strong>Prakash Raj U</strong></div>
+      <div style="color: #0969da; font-family: monospace;">70d43eb</div>
+    </div>
+  </div>
+
+  <div class="branch-card" style="border-left: 4px solid #8250df;">
+    <div>
+      <div class="branch-name">🌿 develop <span class="badge-purple branch-badge">Integration Baseline</span></div>
+      <div style="font-size: 12px; color: #656d76; margin-top: 4px;">Active integration pipeline. Automatic Jenkins CI builds and unit tests executed on every push.</div>
+    </div>
+    <div style="text-align: right; font-size: 12px; color: #656d76;">
+      <div>Updated 4 hours ago by <strong>Bharathwaraj K S</strong></div>
+      <div style="color: #0969da; font-family: monospace;">74aa410</div>
+    </div>
+  </div>
+
+  <div class="branch-card" style="border-left: 4px solid #0969da;">
+    <div>
+      <div class="branch-name">🌿 feature/multi-developer-collab <span class="badge-blue branch-badge">Feature Branch</span></div>
+      <div style="font-size: 12px; color: #656d76; margin-top: 4px;">Collaborative development for 4-member TechNova scenario (Prakash, Bharath, Arun, Kavya).</div>
+    </div>
+    <div style="text-align: right; font-size: 12px; color: #656d76;">
+      <div>Merged into develop via PR #4</div>
+      <div style="color: #0969da; font-family: monospace;">c9223ea</div>
+    </div>
+  </div>
+
+  <div class="branch-card" style="border-left: 4px solid #ea580c;">
+    <div>
+      <div class="branch-name">🌿 bugfix/demo-calc-failure <span style="background: #ea580c; color: white;" class="branch-badge">Bugfix Branch</span></div>
+      <div style="font-size: 12px; color: #656d76; margin-top: 4px;">Targeted fix for BUG-024 / CR-009 Calculator add calculation defect.</div>
+    </div>
+    <div style="text-align: right; font-size: 12px; color: #656d76;">
+      <div>Merged into develop via PR #2</div>
+      <div style="color: #0969da; font-family: monospace;">e789c77</div>
+    </div>
+  </div>
+
+  <div class="branch-card" style="border-left: 4px solid #0284c7;">
+    <div>
+      <div class="branch-name">🌿 release/v1.0.0 <span style="background: #0284c7; color: white;" class="branch-badge">Release Candidate</span></div>
+      <div style="font-size: 12px; color: #656d76; margin-top: 4px;">Release staging, FCA/PCA configuration auditing, and release manifest packaging.</div>
+    </div>
+    <div style="text-align: right; font-size: 12px; color: #656d76;">
+      <div>Promoted to main & tagged v1.0.0</div>
+      <div style="color: #0969da; font-family: monospace;">11b38f4</div>
+    </div>
+  </div>
+
+  <div class="gitflow-diag">
+    <div style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 14px;">Gitflow Architectural Model in CommitSleuth</div>
+    
+    <div class="lane">
+      <div class="lane-label" style="color: #1a7f37;">main (Production)</div>
+      <div class="lane-track" style="background: #dcfce7; border: 1px solid #86efac;">
+        <div class="lane-node" style="border-color: #1a7f37;">BL1</div>
+        <div style="flex:1; border-top: 2px dashed #1a7f37;"></div>
+        <div class="lane-node" style="border-color: #1a7f37;">BL2</div>
+        <div style="flex:1; border-top: 2px solid #1a7f37;"></div>
+        <div class="lane-node" style="border-color: #1a7f37;">v1.0</div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-label" style="color: #8250df;">develop (Staging)</div>
+      <div class="lane-track" style="background: #f3e8ff; border: 1px solid #d8b4fe;">
+        <div class="lane-node" style="border-color: #8250df;">int</div>
+        <div style="flex:1; border-top: 2px solid #8250df;"></div>
+        <div class="lane-node" style="border-color: #8250df;">PR1</div>
+        <div style="flex:1; border-top: 2px solid #8250df;"></div>
+        <div class="lane-node" style="border-color: #8250df;">PR2</div>
+        <div style="flex:1; border-top: 2px solid #8250df;"></div>
+        <div class="lane-node" style="border-color: #8250df;">PR4</div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-label" style="color: #0969da;">feature/*</div>
+      <div class="lane-track" style="background: #e0f2fe; border: 1px solid #7dd3fc;">
+        <div class="lane-node" style="border-color: #0969da;">c1</div>
+        <div class="lane-node" style="border-color: #0969da;">c2</div>
+        <div class="lane-node" style="border-color: #0969da;">c3</div>
+        <span style="font-size: 11px; color: #0369a1; font-weight: 600;">(Prakash, Bharath, Arun, Kavya)</span>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-label" style="color: #ea580c;">bugfix/* (BUG-024)</div>
+      <div class="lane-track" style="background: #ffedd5; border: 1px solid #fdba74;">
+        <div class="lane-node" style="border-color: #ea580c; background: #fee2e2;">fail</div>
+        <div style="flex:1; border-top: 2px solid #ea580c;"></div>
+        <div class="lane-node" style="border-color: #ea580c; background: #dcfce7;">fix</div>
+        <span style="font-size: 11px; color: #c2410c; font-weight: 600;">Isolated patch & test verification</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

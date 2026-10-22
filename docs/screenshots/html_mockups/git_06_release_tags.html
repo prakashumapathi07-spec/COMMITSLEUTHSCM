@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
+body { background: #ffffff; color: #1f2328; font-size: 14px; line-height: 1.5; }
+.gh-header { background: #f6f8fa; border-bottom: 1px solid #d0d7de; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.gh-repo-title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #0969da; }
+.gh-badge { font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 12px; border: 1px solid #d0d7de; color: #656d76; background: #ffffff; }
+.gh-nav { display: flex; gap: 24px; border-bottom: 1px solid #d0d7de; padding: 0 32px; background: #f6f8fa; }
+.gh-nav-item { padding: 12px 4px; font-weight: 500; color: #656d76; text-decoration: none; display: flex; align-items: center; gap: 6px; border-bottom: 2px solid transparent; }
+.gh-nav-item.active { color: #1f2328; font-weight: 600; border-bottom-color: #fd8c73; }
+.gh-counter { background: rgba(175,184,193,0.2); padding: 2px 6px; border-radius: 10px; font-size: 12px; }
+.container { max-width: 1280px; margin: 24px auto; padding: 0 24px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 13px; font-weight: 600; border-radius: 6px; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; cursor: pointer; }
+.btn-primary { background: #1f883d; color: #ffffff; border-color: rgba(31,35,40,0.15); }
+.badge-purple { background: #8250df; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-green { background: #1a7f37; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-blue { background: #0969da; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+
+.release-card { border: 1px solid #d0d7de; border-radius: 8px; padding: 24px; margin-bottom: 24px; background: #ffffff; }
+.release-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; border-bottom: 1px solid #eaeef2; padding-bottom: 14px; }
+.release-tag { font-size: 20px; font-weight: 700; color: #1f2328; display: flex; align-items: center; gap: 10px; }
+.asset-table { width: 100%; border: 1px solid #d0d7de; border-radius: 6px; border-collapse: collapse; margin-top: 14px; }
+.asset-table td { padding: 9px 16px; font-size: 13px; border-top: 1px solid #eaeef2; }
+.asset-table tr:first-child td { border-top: none; }
+.asset-name { font-weight: 600; color: #0969da; display: flex; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+<div class="gh-header">
+  <div class="gh-repo-title">
+    <span>prakashumapathi07-spec</span> / <strong style="color: #0969da;">COMMITSLEUTHSCM</strong>
+    <span class="gh-badge">Public</span>
+  </div>
+  <div style="font-size: 13px; color: #656d76;">Releases & Official Configuration Baselines</div>
+</div>
+
+<div class="container">
+  <div style="margin-bottom: 20px;">
+    <h2 style="font-size: 22px; font-weight: 600;">Releases & Cryptographic Baseline Tags</h2>
+    <div style="font-size: 13px; color: #656d76;">Immutable semantic release tags established for formal Configuration Control Board (CCB) baseline audits.</div>
+  </div>
+
+  <div class="release-card" style="border: 2px solid #1a7f37;">
+    <div class="release-header">
+      <div>
+        <div class="release-tag">
+          🏷️ v1.0.0
+          <span class="badge-green">Latest Release</span>
+          <span style="font-size: 14px; font-weight: 500; color: #475569;">Release Baseline BL-05 (Production)</span>
+        </div>
+        <div style="font-size: 13px; color: #656d76; margin-top: 6px;">
+          Tag <code style="color: #0969da; font-family: monospace;">11b38f4</code> · Verified by <strong>Prakash Raj U</strong> on October 22, 2026
+        </div>
+      </div>
+      <div>
+        <button class="btn">Edit release</button>
+      </div>
+    </div>
+
+    <div style="font-size: 14px; line-height: 1.6; color: #334155; margin-bottom: 16px;">
+      <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 8px; color: #0f172a;">Official SCM Final Review Release Baseline v1.0.0:</h3>
+      <ul style="padding-left: 20px; margin-bottom: 12px;">
+        <li><strong>Configuration Baseline BL-05:</strong> Complete integration of Employee, Authentication, Reports, and Database modules.</li>
+        <li><strong>Collaborative SCM:</strong> Full multi-developer workflow verified across Prakash Raj U, Bharathwaraj K S, Arun Kumar, and Kavya Sharma.</li>
+        <li><strong>FCA/PCA Audits:</strong> 100% compliance across all 14 Functional Requirements and 7 Physical Configuration Item standards.</li>
+        <li><strong>Promotional Clearance:</strong> Passed Development ➔ Testing ➔ Staging ➔ Production Quality Gates with 0 open defect records.</li>
+      </ul>
+    </div>
+
+    <div style="font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #1f2328;">📦 Assets (4 files)</div>
+    <table class="asset-table">
+      <tr>
+        <td class="asset-name">📦 commitsleuth-1.0.0.jar</td>
+        <td style="color: #656d76;">Compiled standalone production bundle</td>
+        <td style="color: #656d76; text-align: right;">18.4 MB</td>
+      </tr>
+      <tr>
+        <td class="asset-name">📄 release-manifest-v1.0.0.json</td>
+        <td style="color: #656d76;">Cryptographic SHA-256 manifests & CI signatures</td>
+        <td style="color: #656d76; text-align: right;">14.2 KB</td>
+      </tr>
+      <tr>
+        <td class="asset-name">📦 Source code (zip)</td>
+        <td style="color: #656d76;">Repository snapshot at commit 11b38f4</td>
+        <td style="color: #656d76; text-align: right;">3.2 MB</td>
+      </tr>
+      <tr>
+        <td class="asset-name">📄 checksums.sha256</td>
+        <td style="color: #656d76;">Digital integrity verification hashes</td>
+        <td style="color: #656d76; text-align: right;">1.1 KB</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="release-card">
+    <div class="release-header">
+      <div>
+        <div class="release-tag">
+          🏷️ v0.2.0
+          <span class="badge-blue">Baseline BL-04</span>
+        </div>
+        <div style="font-size: 13px; color: #656d76; margin-top: 6px;">
+          Tag <code style="color: #0969da; font-family: monospace;">f0ad7d0</code> · PR #1 feature/scoring-config merge by Bharathwaraj K S
+        </div>
+      </div>
+    </div>
+    <div style="font-size: 13.5px; color: #475569;">
+      Analysis and Heuristic Blame Attribution engine baseline with configurable YAML scoring weights.
+    </div>
+  </div>
+
+  <div class="release-card">
+    <div class="release-header">
+      <div>
+        <div class="release-tag">
+          🏷️ v0.1.0
+          <span style="background: #e2e8f0; color: #475569;" class="branch-badge">Baseline BL-01/02</span>
+        </div>
+        <div style="font-size: 13px; color: #656d76; margin-top: 6px;">
+          Tag <code style="color: #0969da; font-family: monospace;">a7b2a71</code> · Initial repository commit & requirements baseline
+        </div>
+      </div>
+    </div>
+    <div style="font-size: 13.5px; color: #475569;">
+      Initial requirements baseline, project directory architecture, and Maven pom.xml configuration.
+    </div>
+  </div>
+</div>
+</body>
+</html>

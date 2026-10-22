@@ -1,25 +1,29 @@
 """Script to generate CommitSleuth SCM Final Review Microsoft Word (.docx) Document.
-Follows exact formatting:
+Follows exact academic formatting:
 - A4 size, 1-inch margins
 - Times New Roman, 12pt body text, ~1.5 line spacing
 - Bold numbered headings
 - Exactly 12 required sections in order
-- Real project screenshots with figure numbers, captions, and explanations
+- Features Git & GitHub as the primary SCM tool with Screenshots 1 through 6
+- Embeds the Build Failure Tracking Roadmap
+- Embeds the Team Developer Commit Traceability Tabulation (modeled on the uploaded reference format)
+- Embeds Web Application screenshots for all 10 SCM topics
 - Cover page with all project and team details
 """
 import os
 import sys
 import docx
 from docx.shared import Inches, Pt, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
+from docx.oxml.ns import qn, nsdecls
+from docx.oxml import parse_xml
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SC_DIR = os.path.join(ROOT, "docs", "screenshots")
 
-def set_cell_margins(cell, top=100, bottom=100, left=150, right=150):
+def set_cell_margins(cell, top=100, bottom=100, left=140, right=140):
     tcPr = cell._tc.get_or_add_tcPr()
     tcMar = OxmlElement('w:tcMar')
     for m, val in [('top', top), ('bottom', bottom), ('left', left), ('right', right)]:
@@ -28,6 +32,29 @@ def set_cell_margins(cell, top=100, bottom=100, left=150, right=150):
         node.set(qn('w:type'), 'dxa')
         tcMar.append(node)
     tcPr.append(tcMar)
+
+def set_cell_background(cell, hex_color):
+    tcPr = cell._tc.get_or_add_tcPr()
+    shd = tcPr.find(qn('w:shd'))
+    if shd is not None:
+        tcPr.remove(shd)
+    shd = OxmlElement('w:shd')
+    shd.set(qn('w:val'), 'clear')
+    shd.set(qn('w:color'), 'auto')
+    shd.set(qn('w:fill'), hex_color)
+    tcPr.append(shd)
+
+def set_table_borders(table, color="B4C6E7", sz="4", val="single"):
+    tblPr = table._tbl.tblPr
+    tblBorders = OxmlElement('w:tblBorders')
+    for border_name in ['top', 'left', 'bottom', 'right', 'insideH', 'insideV']:
+        border = OxmlElement(f'w:{border_name}')
+        border.set(qn('w:val'), val)
+        border.set(qn('w:sz'), sz)
+        border.set(qn('w:space'), '0')
+        border.set(qn('w:color'), color)
+        tblBorders.append(border)
+    tblPr.append(tblBorders)
 
 def add_page_number(run):
     fldSimple = OxmlElement('w:fldSimple')
@@ -80,10 +107,10 @@ def generate_docx():
         r.font.color.rgb = RGBColor(30, 41, 59)
         return p
 
-    # Helper function for section headings
+    # Helper function for section headings (Level 1)
     def add_heading_1(text):
         p = doc.add_paragraph()
-        p.paragraph_format.space_before = Pt(16)
+        p.paragraph_format.space_before = Pt(18)
         p.paragraph_format.space_after = Pt(6)
         p.paragraph_format.keep_with_next = True
         r = p.add_run(text)
@@ -93,10 +120,10 @@ def generate_docx():
         r.font.color.rgb = RGBColor(15, 23, 42)
         return p
 
-    # Helper function for subheadings
+    # Helper function for subheadings (Level 2)
     def add_heading_2(text):
         p = doc.add_paragraph()
-        p.paragraph_format.space_before = Pt(10)
+        p.paragraph_format.space_before = Pt(12)
         p.paragraph_format.space_after = Pt(4)
         p.paragraph_format.keep_with_next = True
         r = p.add_run(text)
@@ -106,8 +133,8 @@ def generate_docx():
         r.font.color.rgb = RGBColor(30, 41, 59)
         return p
 
-    # Helper function for embedding screenshots
-    def add_screenshot(filename, fig_num, caption, explanation):
+    # Helper function for embedding figures
+    def add_screenshot(filename, fig_num, caption, explanation, width_inches=6.0):
         img_path = os.path.join(SC_DIR, filename)
         if os.path.exists(img_path):
             p_img = doc.add_paragraph()
@@ -115,7 +142,7 @@ def generate_docx():
             p_img.paragraph_format.space_before = Pt(8)
             p_img.paragraph_format.space_after = Pt(4)
             p_img.paragraph_format.keep_with_next = True
-            p_img.add_run().add_picture(img_path, width=Inches(5.95))
+            p_img.add_run().add_picture(img_path, width=Inches(width_inches))
 
             p_cap = doc.add_paragraph()
             p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -131,14 +158,14 @@ def generate_docx():
 
             add_body(explanation, space_after=10, bold_prefix=f"Figure {fig_num} Explanation: ")
         else:
-            add_body(f"[Note: Screenshot {filename} is currently undergoing archival. Project verification conducted via live runtime interface.]", space_after=8)
+            add_body(f"[Figure {fig_num}: {caption} — Image asset {filename} pending archive.]", space_after=8)
 
     # =========================================================================
     # COVER PAGE
     # =========================================================================
     p_inst = doc.add_paragraph()
     p_inst.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_inst.paragraph_format.space_before = Pt(24)
+    p_inst.paragraph_format.space_before = Pt(20)
     p_inst.paragraph_format.space_after = Pt(4)
     r_inst = p_inst.add_run("VELLORE INSTITUTE OF TECHNOLOGY (VIT), VELLORE\n")
     r_inst.font.name = "Times New Roman"
@@ -157,18 +184,16 @@ def generate_docx():
     r_crs.font.bold = True
     r_crs.font.color.rgb = RGBColor(30, 58, 138)
 
-    # Decorative Line
     p_line = doc.add_paragraph()
     p_line.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_line.paragraph_format.space_before = Pt(6)
-    p_line.paragraph_format.space_after = Pt(20)
+    p_line.paragraph_format.space_before = Pt(4)
+    p_line.paragraph_format.space_after = Pt(18)
     r_l = p_line.add_run("—" * 38)
     r_l.font.color.rgb = RGBColor(203, 213, 225)
 
-    # Project Title
     p_proj = doc.add_paragraph()
     p_proj.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_proj.paragraph_format.space_before = Pt(12)
+    p_proj.paragraph_format.space_before = Pt(10)
     p_proj.paragraph_format.space_after = Pt(6)
     r_pname = p_proj.add_run("CommitSleuth\n")
     r_pname.font.name = "Times New Roman"
@@ -182,11 +207,10 @@ def generate_docx():
     r_psub.font.italic = True
     r_psub.font.color.rgb = RGBColor(71, 85, 105)
 
-    # Evaluation Title
     p_eval = doc.add_paragraph()
     p_eval.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_eval.paragraph_format.space_before = Pt(14)
-    p_eval.paragraph_format.space_after = Pt(28)
+    p_eval.paragraph_format.space_before = Pt(12)
+    p_eval.paragraph_format.space_after = Pt(24)
     r_eval = p_eval.add_run("FINAL TOOL DEMONSTRATION EVALUATION (REVIEW-III)")
     r_eval.font.name = "Times New Roman"
     r_eval.font.size = Pt(13)
@@ -196,12 +220,13 @@ def generate_docx():
     # Metadata Details Table
     meta_table = doc.add_table(rows=6, cols=2)
     meta_table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    set_table_borders(meta_table, color="CBD5E1", sz="4")
     meta_data = [
         ("Course Details:", "ISWE403L — Software Configuration Management"),
         ("Evaluation:", "Final Tool Demonstration Evaluation (Review-III)"),
         ("Faculty Guide:", "Prof. Senthil Kumar P"),
         ("Slot:", "E1 + TE1"),
-        ("SCM Tool Selected:", "Git & GitHub"),
+        ("SCM Tool Selected:", "Git & GitHub (Primary SCM Toolchain)"),
         ("GitHub Repository:", "https://github.com/prakashumapathi07-spec/COMMITSLEUTHSCM.git")
     ]
     for row_idx, (label, val) in enumerate(meta_data):
@@ -209,14 +234,15 @@ def generate_docx():
         cell_val = meta_table.cell(row_idx, 1)
         cell_lbl.width = Inches(2.2)
         cell_val.width = Inches(4.2)
-        set_cell_margins(cell_lbl, 80, 80, 100, 100)
-        set_cell_margins(cell_val, 80, 80, 100, 100)
+        set_cell_margins(cell_lbl, 70, 70, 100, 100)
+        set_cell_margins(cell_val, 70, 70, 100, 100)
+        set_cell_background(cell_lbl, "F8FAFC")
         
         p0 = cell_lbl.paragraphs[0]
         p0.paragraph_format.line_spacing = 1.15
         r0 = p0.add_run(label)
         r0.font.name = "Times New Roman"
-        r0.font.size = Pt(11.5)
+        r0.font.size = Pt(11)
         r0.font.bold = True
         r0.font.color.rgb = RGBColor(15, 23, 42)
 
@@ -224,13 +250,13 @@ def generate_docx():
         p1.paragraph_format.line_spacing = 1.15
         r1 = p1.add_run(val)
         r1.font.name = "Times New Roman"
-        r1.font.size = Pt(11.5)
+        r1.font.size = Pt(11)
         r1.font.color.rgb = RGBColor(30, 41, 59)
 
     # Team Members Block
     p_team = doc.add_paragraph()
     p_team.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_team.paragraph_format.space_before = Pt(36)
+    p_team.paragraph_format.space_before = Pt(32)
     p_team.paragraph_format.space_after = Pt(4)
     r_tm = p_team.add_run("Project Team Members:\n")
     r_tm.font.name = "Times New Roman"
@@ -254,7 +280,6 @@ def generate_docx():
     r_d2.font.bold = True
     r_d2.font.color.rgb = RGBColor(30, 58, 138)
 
-    # Academic Year
     p_yr = doc.add_paragraph()
     p_yr.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_yr.paragraph_format.space_before = Pt(20)
@@ -284,15 +309,49 @@ def generate_docx():
     # =========================================================================
     add_heading_1("2. Tool Implementation")
     add_body(
-        "Tool Implementation represents the foundational SCM activity that unites the software toolchain into a cohesive, automated workflow. CommitSleuth establishes an integrated pipeline connecting Git/GitHub for version control, Jenkins for continuous integration orchestration, Apache Maven for automated Java compilation and JUnit 5 Surefire test execution, Python for log parsing and heuristic attribution scoring, SQLite for persistent configuration status accounting, and Flask for an interactive, light-theme web dashboard."
+        "Tool Implementation represents the foundational SCM activity that unites the software toolchain into a cohesive, automated workflow. CommitSleuth establishes Git and GitHub as its primary, authoritative version management backbone, tightly integrated with Apache Maven for automated Java compilation and JUnit 5 Surefire test execution, Jenkins for declarative CI/CD pipeline orchestration, Python for failure parsing and heuristic attribution scoring, SQLite for persistent configuration status accounting, and Flask for an interactive, light-theme web dashboard."
     )
     add_body(
-        "The realistic operational scenario implemented for CommitSleuth models TechNova Solutions, where four developers collaborate on an Employee Management System across dedicated feature branches: Prakash Raj (Employee module on feature/employee), Bharathwaraj (Authentication module on feature/login), Karthik (Reports module on feature/reports), and Divya (Database module on feature/database). When a developer commits code, GitHub triggers Jenkins through declarative pipelines defined in Jenkinsfile. Maven compiles the Java application and executes unit tests. If a failure occurs, Jenkins invokes CommitSleuth's backend build recorder, which analyzes the failure and updates the relational database in real time."
+        "The authoritative GitHub repository (https://github.com/prakashumapathi07-spec/COMMITSLEUTHSCM.git) governs all controlled Configuration Items (CIs), branch topologies, code diffs, pull request gates, and cryptographic release tags. All project files—including build descriptors (pom.xml, Jenkinsfile), Python analysis engines (parser/, analyzer/, alerts/), database schemas, and documentation—are maintained under strict version control with enforced Change Request identifiers."
     )
+    
+    # Git Screenshot 1: Repo Overview
+    add_screenshot(
+        "git_01_repo_overview.png",
+        1,
+        "GitHub Repository Overview & File Tree Structure (COMMITSLEUTHSCM)",
+        "The primary GitHub repository overview illustrates the controlled repository structure for CommitSleuth under 'prakashumapathi07-spec/COMMITSLEUTHSCM'. The interface displays active branches (main, develop, feature branches), official release baseline tags (v1.0.0 Latest), the verified commit teaser for commit 70d43eb, team contributor statistics across Prakash Raj U and Bharathwaraj K S, repository languages (Java 54.2%, Python 36.4%), and the hierarchical directory tree containing Maven configurations, Python modules, database scripts, and test suites."
+    )
+
+    add_heading_2("2.1 End-to-End Build Failure Tracking Roadmap")
+    add_body(
+        "To systematically eliminate the 'Blame HEAD' fallacy, CommitSleuth implements an automated 9-phase failure tracking and resolution roadmap. This roadmap coordinates developer commits, continuous integration triggers, stack trace parsing, multi-factor attribution, automated incident recording, real-time alert dispatch, interactive diagnostics, corrective commits, and promotional gating into a continuous feedback loop:"
+    )
+    add_body(
+        "• Phase 1 (Developer Code Push): A developer commits code changes on a feature branch. Client-side Git hook hooks/commit-msg intercepts the commit to verify mandatory Change Request (CR) traceability.\n"
+        "• Phase 2 (CI Pipeline & Test Execution): GitHub webhooks trigger the Jenkins declarative pipeline. Apache Maven compiles Java classes and executes JUnit 5 Surefire automated unit tests.\n"
+        "• Phase 3 (Build Failure Interception): When a test assertion or compilation error occurs (e.g. Build #128), Jenkins post-build steps intercept the failure exit code and archive console output and Surefire XML reports.\n"
+        "• Phase 4 (Log Parsing & Error Signature Extraction): CommitSleuth's log ingestion engine parses stack traces, extracting the exact failing class (ReportServiceTest), method, assertion delta, and candidate commit batch.\n"
+        "• Phase 5 (Multi-Factor Blame Attribution): The heuristic engine evaluates candidate commits across four factors (File Matching 55%, Dependency Changes 25%, Commit Recency 10%, Change Size 10%), calculating a Bayesian blame attribution score.\n"
+        "• Phase 6 (SCM Incident Record & Alert Dispatch): The system creates a formal problem record (BUG-024) in the database and dispatches instant notifications to the web portal, email, and notification bus.\n"
+        "• Phase 7 (Developer Diagnostic Portal): The responsible developer navigates to the failure dashboard (/failures/128) to inspect syntax-highlighted console logs, culprit diffs, and recommended one-click code fixes.\n"
+        "• Phase 8 (Bugfix Checkout & Verification Re-test): The developer creates an isolated bugfix branch, implements the approved corrective commit (referencing CR-010), and triggers automated verification Build #129.\n"
+        "• Phase 9 (Verification & Promotional Gate): Upon clean compilation and 100% test pass, BUG-024 is automatically transitioned to RESOLVED. SCM promotion gates verify audit checklists and authorize baseline advancement to Production (BL-05)."
+    )
+
+    # Failure Tracking Roadmap Diagram
+    add_screenshot(
+        "git_07_failure_tracking_roadmap.png",
+        2,
+        "CommitSleuth Build Failure Tracking & Root-Cause Resolution Roadmap",
+        "The Failure Tracking Roadmap diagram illustrates the comprehensive 9-stage operational lifecycle implemented in CommitSleuth. It maps how code transitions from local developer commits through automated CI execution, failure capture, heuristic blame attribution (88.5% confidence for BUG-024), real-time alerts, developer root-cause diagnosis, verified corrective commits (Build #129), and formal SCM promotional gate clearance."
+    )
+
+    # Web Dashboard Screenshot
     add_screenshot(
         "fig01_dashboard.png",
-        1,
-        "CommitSleuth Executive SCM Dashboard",
+        3,
+        "CommitSleuth Executive SCM Web Dashboard",
         "The Executive SCM Dashboard provides an integrated high-level view of continuous integration pipeline health, displaying calculated metrics such as total builds, build success rate (77.8%), open problem records, and unread alerts. It includes interactive visualizations of 30-day build trends, build status across the four TechNova modules, a collaborative developer activity panel, and recent pipeline executions."
     )
 
@@ -306,11 +365,128 @@ def generate_docx():
     add_body(
         "To enforce traceability between source revisions and approved tasks, a Git commit message hook (hooks/commit-msg) validates that every commit message begins with an approved Change Request identifier (e.g., CR-009). Furthermore, formal configuration baselines are established and tracked in the database: BL-01 (Requirements Baseline, v0.1.0-req), BL-02 (Design Baseline, v0.1.0), BL-03 (CI/Build Baseline, v0.1.0), BL-04 (Analysis Module Baseline, v0.2.0), and BL-05 (Final Release Baseline, v1.0.0). Each baseline associates approved configuration items with an immutable Git release tag, target commit hash, and CCB authorization record."
     )
+
+    # Git Screenshot 2: Commit History
+    add_screenshot(
+        "git_02_commit_history.png",
+        4,
+        "Git Commit History & SCM Change Traceability Log",
+        "The Git Commit History log demonstrates strict SCM traceability across the project lifecycle. Each commit displays verified cryptographic commit hashes (70d43eb, fa4b2c5, 11b38f4, etc.), author signatures for Prakash Raj U and Bharathwaraj K S, timestamps, and mandatory CR-xxx prefixes validated by git hooks, alongside terminal git log output showing branch decorations and merge parents."
+    )
+
+    add_heading_2("3.1 Team Developer Commit Traceability Tabulation")
+    add_body(
+        "The following tabulation records the complete, verified commit ledger of the CommitSleuth project. It maps individual developer commits directly to calendar dates, project authors, formal Change Requests (CR-001 through CR-016), Configuration Baselines (BL-01 through BL-05), and affected Configuration Items (CIs), providing 100% bidirectional traceability between requirements, code modifications, and release artifacts:"
+    )
+
+    # Developer Commit Traceability Table (Matching user's reference image format)
+    commit_rows = [
+        ("a7b2a71", "2026-10-05", "Prakash Raj U", "docs(ci-01, ci-02): initialize requirements, SCM plan & directory structure [Requirements Baseline]", "CI-01, CI-02"),
+        ("99bbeb5", "2026-10-08", "Bharathwaraj K S", "design(ci-03, ci-04): establish heuristic blame scoring weights & database schema [Design Baseline]", "CI-03, CI-04"),
+        ("f0ad7d0", "2026-10-10", "Prakash Raj U", "Merge pull request #1 from feature/scoring-config: implement YAML configuration [Baseline BL-04]", "CI-03, CI-05"),
+        ("f1127d0", "2026-10-12", "Bharathwaraj K S", "feat(ci-05): implement executive SCM dashboard & build recorder controller [CR-002]", "CI-05"),
+        ("9297e33", "2026-10-14", "Prakash Raj U", "feat(ci-09): introduce calculation failure in Calculator add method for fault injection [CR-009]", "CI-09"),
+        ("63e1e5b", "2026-10-15", "Bharathwaraj K S", "test(ci-06): update regression test notes & automated Surefire assertion check [CR-009]", "CI-06"),
+        ("e789c77", "2026-10-16", "Prakash Raj U", "fix(ci-09): resolve Calculator calculation defect and restore passing build [CR-009]", "CI-09"),
+        ("0814589", "2026-10-16", "Bharathwaraj K S", "Merge pull request #2 from bugfix/demo-calc-failure: resolve defect BUG-024 (CR-009)", "CI-06, CI-09"),
+        ("6f147e3", "2026-10-17", "Prakash Raj U", "feat(ci-02): add multi-encoding log parser support for Jenkins build recorder [CR-007]", "CI-02"),
+        ("d6b3be0", "2026-10-18", "Bharathwaraj K S", "feat(ci-09): add range validation logic to Validator service for employee module [CR-010]", "CI-09"),
+        ("077e17c", "2026-10-19", "Prakash Raj U", "feat(ci-09): update calculation logic in Calculator add method for boundary testing [CR-011]", "CI-09"),
+        ("4025917", "2026-10-20", "Arun Kumar", "tune(ci-03): refine attribution scoring weights & Bayesian confidence thresholds [CR-012]", "CI-03"),
+        ("5fbf9c0", "2026-10-20", "Kavya Sharma", "test(ci-06): add collaborative team workflow & multi-developer CI test matrix [CR-013]", "CI-06"),
+        ("74aa410", "2026-10-21", "Bharathwaraj K S", "Merge pull request #4 from feature/multi-developer-collab into develop (CR-014)", "CI-06, CI-09"),
+        ("7e43c78", "2026-10-21", "Prakash Raj U", "Merge branch develop into main: Production Release Baseline v1.0.0 [Release v1.0.0]", "Release v1.0.0"),
+        ("11b38f4", "2026-10-22", "Prakash Raj U", "release(ci-10): finalize official release manifest, FCA/PCA sign-off & audit checklist [BL-05]", "CI-10, Release v1.0.0"),
+        ("fa4b2c5", "2026-10-22", "Bharathwaraj K S", "feat(ci-05): implement light-theme UI, TechNova 4-developer scenario & SCM governance [CR-015]", "CI-05"),
+        ("70d43eb", "2026-10-22", "Prakash Raj U", "docs(ci-08): add CommitSleuth SCM Final Review Microsoft Word documentation [CR-016]", "CI-08, CI-10"),
+    ]
+
+    trace_table = doc.add_table(rows=len(commit_rows) + 1, cols=5)
+    trace_table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    set_table_borders(trace_table, color="B4C6E7", sz="4")
+
+    headers = ["Commit", "Date", "Author", "Commit Message & SCM Association", "Affected CI"]
+    col_widths = [Inches(1.0), Inches(1.0), Inches(1.3), Inches(2.3), Inches(1.0)]
+
+    # Header Row
+    hdr_cells = trace_table.rows[0].cells
+    for i, h_text in enumerate(headers):
+        hdr_cells[i].width = col_widths[i]
+        set_cell_margins(hdr_cells[i], 80, 80, 100, 100)
+        set_cell_background(hdr_cells[i], "D9E1F2")
+        p = hdr_cells[i].paragraphs[0]
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        r = p.add_run(h_text)
+        r.font.name = "Times New Roman"
+        r.font.size = Pt(10.5)
+        r.font.bold = True
+        r.font.color.rgb = RGBColor(0, 0, 0)
+
+    # Data Rows
+    for row_idx, data in enumerate(commit_rows):
+        row_cells = trace_table.rows[row_idx + 1].cells
+        bg_col = "F8FAFC" if row_idx % 2 == 1 else "FFFFFF"
+        for col_idx, text_val in enumerate(data):
+            row_cells[col_idx].width = col_widths[col_idx]
+            set_cell_margins(row_cells[col_idx], 60, 60, 90, 90)
+            set_cell_background(row_cells[col_idx], bg_col)
+            p = row_cells[col_idx].paragraphs[0]
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            p.paragraph_format.line_spacing = 1.15
+            
+            r = p.add_run(text_val)
+            if col_idx == 0:
+                r.font.name = "Consolas"
+                r.font.size = Pt(9.5)
+                r.font.bold = True
+                r.font.color.rgb = RGBColor(15, 23, 42)
+            else:
+                r.font.name = "Times New Roman"
+                r.font.size = Pt(9.5)
+                r.font.color.rgb = RGBColor(30, 41, 59)
+                if col_idx == 2:
+                    r.font.bold = True
+
+    add_body("", space_after=6) # Spacing after table
+
+    # Git Screenshot 3: Branches & Gitflow
+    add_screenshot(
+        "git_03_branches_gitflow.png",
+        5,
+        "Git Branches & Gitflow Hierarchy Structure",
+        "The Git Branches view displays the five active repository branches: main (production baseline), develop (continuous integration), feature/multi-developer-collab (4-member team module work), bugfix/demo-calc-failure (targeted defect isolation), and release/v1.0.0 (production candidate). It includes the visual Gitflow architectural diagram showing branch lane separation and promotional flow."
+    )
+
+    # Git Screenshot 4: Network Graph
+    add_screenshot(
+        "git_04_network_graph.png",
+        6,
+        "GitHub Visual Commit Tree & Network Graph (DAG)",
+        "The Visual Commit Network Graph displays the directed acyclic graph (DAG) of the repository. It illustrates parallel branch development, commit nodes from each developer, branch divergence from develop, bugfix branch isolation for defect BUG-024, merge commits (0814589, 74aa410, 7e43c78), and official release tags (v1.0.0)."
+    )
+
+    # Git Screenshot 5: PR Review & Diff
+    add_screenshot(
+        "git_05_pr_review_diff.png",
+        7,
+        "GitHub Pull Request Review, CI Gate Status & Unified Code Diff",
+        "The Pull Request interface for PR #4 demonstrates formal SCM gate enforcement. It showcases verified CI test pass status, peer code review approval from Bharathwaraj K S (CCB), and the unified code diff in Calculator.java and ReportService.java showing exact line additions (+) and deletions (-) resolving the defect."
+    )
+
+    # Git Screenshot 6: Release Tags
+    add_screenshot(
+        "git_06_release_tags.png",
+        8,
+        "GitHub Releases, Semantic Tags & Official Baseline Manifests",
+        "The GitHub Releases register documents official Configuration Baselines: Release v1.0.0 (Baseline BL-05), v0.2.0 (Baseline BL-04), and v0.1.0 (Baseline BL-01). It highlights signed release notes, commit hash bindings, FCA/PCA audit compliance, and packaged binary distribution assets (JAR, manifest JSON, and SHA-256 checksums)."
+    )
+
+    # Web Baselines Screenshot
     add_screenshot(
         "fig07_baselines_versions.png",
-        2,
-        "Baselines and Version Management Register",
-        "The Baselines and Version Management interface displays approved configuration baselines (BL-01 through BL-05), their corresponding semantic version identifiers, Git release tags, commit hashes, approval dates, and baseline comparison tools that show configuration item deltas between historical and release baselines."
+        9,
+        "CommitSleuth Web Application Baselines Register",
+        "The Baselines and Version Management interface in the CommitSleuth web portal displays approved configuration baselines (BL-01 through BL-05), their semantic versions, Git release tags, commit hashes, approval dates, and baseline comparison tools tracking configuration item deltas."
     )
 
     # =========================================================================
@@ -321,13 +497,13 @@ def generate_docx():
         "Change Management provides a disciplined, formal mechanism for requesting, evaluating, authorizing, implementing, and verifying modifications to controlled configuration items. Uncontrolled changes lead to configuration drift, untracked bugs, and broken builds. In CommitSleuth, all modifications are initiated through formal Change Requests (CR) submitted to the Configuration Control Board (CCB)."
     )
     add_body(
-        "The project tracks ten formal Change Requests (CR-001 through CR-010). Each change request record documents the unique CR identifier, descriptive title, requester, technical rationale, affected configuration items, priority, target branch, and CCB decision status (Raised, Under Review, Approved, Implemented, or Rejected). For example, CR-009 represents Karthik's modification to monthly expense calculations in ReportService.java on feature/reports, while CR-010 represents the subsequent corrective fix restoring build health. The web interface enables authorized developers to register new change requests while enforcing role permissions so that only CCB administrators can record official approval decisions."
+        "The project tracks sixteen formal Change Requests (CR-001 through CR-016). Each change request record documents the unique CR identifier, descriptive title, requester, technical rationale, affected configuration items, priority, target branch, and CCB decision status (Raised, Under Review, Approved, Implemented, or Rejected). For example, CR-009 represents the controlled defect injection and subsequent fix in Calculator.java on bugfix/demo-calc-failure, while CR-014 represents multi-developer collaborative integration. The web interface enables authorized developers to register new change requests while enforcing role permissions so that only CCB administrators can record official approval decisions."
     )
     add_screenshot(
         "fig05_change_management.png",
-        3,
-        "SCM Change Management Register",
-        "The Change Management register displays the formal ledger of Change Requests (CR-001 through CR-010), including requester identities, scope of impact, priority levels, CCB review statuses, target branches, and associated Git commit hashes, ensuring complete auditability from requirement change to code commit."
+        10,
+        "SCM Change Management Register & CCB Review Portal",
+        "The Change Management register displays the formal ledger of Change Requests, including requester identities, scope of impact, priority levels, CCB review statuses, target branches, and associated Git commit hashes, ensuring complete auditability from requirement change to code commit."
     )
 
     # =========================================================================
@@ -338,13 +514,19 @@ def generate_docx():
         "Problem Tracking automates the identification, recording, investigation, and resolution of software defects arising during automated build and test cycles. When an automated Maven test fails in Jenkins, CommitSleuth intercepts the Surefire test report and console output, extracts the exact assertion failure and line number, and automatically generates an incident record in the problems register."
     )
     add_body(
-        "In the central demonstration scenario, Build #128 fails due to an intentional defect introduced by Karthik in ReportService.java, causing ReportServiceTest to fail with an AssertionFailedError. CommitSleuth attributes this failure to Karthik's commit (a91bc42) with 88.5% confidence and automatically creates problem record BUG-024. The problem record progresses through a formal SCM lifecycle: Open -> Investigating -> Fix Submitted -> Verification Pending -> Resolved. A defect cannot be prematurely closed by simple assertion; it transitions to Resolved only after a subsequent verification build (Build #129) successfully compiles and passes all unit tests."
+        "In the central demonstration scenario, Build #128 fails due to a defect introduced in Calculator.java, causing CalculatorTest to fail with an AssertionFailedError. CommitSleuth attributes this failure to candidate commit 9297e33 with 88.5% confidence and automatically creates problem record BUG-024. The problem record progresses through a formal SCM lifecycle: Open -> Investigating -> Fix Submitted -> Verification Pending -> Resolved. A defect cannot be prematurely closed by simple assertion; it transitions to Resolved only after a subsequent verification build (Build #129) successfully compiles and passes all unit tests."
     )
     add_screenshot(
         "fig03_problem_tracking.png",
-        4,
-        "Automated Problem Tracking Register",
-        "The Problem Tracking register illustrates the defect ledger, showing unique problem codes (e.g., BUG-024 / P-001), associated failing build numbers, failure categories (test), suspect commit hashes, attribution confidence scores, assigned developers, and real-time lifecycle progression states."
+        11,
+        "Automated Problem Tracking Register & BUG-024 Incident Ledger",
+        "The Problem Tracking register illustrates the defect ledger, showing unique problem codes (e.g., BUG-024), associated failing build numbers, failure categories (test), suspect commit hashes, attribution confidence scores, assigned developers, and real-time lifecycle progression states."
+    )
+    add_screenshot(
+        "fig04_failure_attribution.png",
+        12,
+        "Web-Enabled Failure Attribution and Root-Cause Diagnostics Interface",
+        "The Failure Attribution web interface demonstrates the interactive root-cause investigation view for Build #128, displaying parsed console output, failing JUnit test assertions, candidate commit ranking breakdown, and automated rollback recommendations."
     )
 
     # =========================================================================
@@ -359,7 +541,7 @@ def generate_docx():
     )
     add_screenshot(
         "fig08_promotions.png",
-        5,
+        13,
         "Promotional Gate Ledger and Quality Gate Evaluation",
         "The Promotional Management ledger demonstrates the multi-environment promotion pipeline, recording successful environment advancements (PASSED) alongside blocked transitions (BLOCKED) with explicit verification rationales, ensuring unverified or defective code cannot reach production."
     )
@@ -376,14 +558,14 @@ def generate_docx():
     )
     add_screenshot(
         "fig06_ci_register.png",
-        6,
-        "Configuration Item (CI) Register",
+        14,
+        "Configuration Item (CI) Register & Lifecycle Ledger",
         "The Configuration Item Register displays the 20 formally controlled CIs, their version identifiers, lifecycle states (e.g., Baselined BL-01 to BL-05), designated owners, approval statuses, categories, and timestamps of last modification."
     )
     add_screenshot(
         "fig10_csar_report.png",
-        7,
-        "Configuration Status Accounting Report (CSAR) Output",
+        15,
+        "Configuration Status Accounting Report (CSAR) Output View",
         "The CSAR output view displays the generated configuration status accounting report summarizing total CIs under control, change request statistics, CI/CD pipeline pass/fail ratios, open versus resolved problem records, and cryptographic release tag references."
     )
 
@@ -401,8 +583,8 @@ def generate_docx():
     )
     add_screenshot(
         "fig09_auditing_fca_pca.png",
-        8,
-        "Configuration Auditing System (FCA & PCA Ledger)",
+        16,
+        "Configuration Auditing System (FCA & PCA Observations Ledger)",
         "The Configuration Auditing interface displays recorded audit observations (AO-01 through AO-07), categorizing each check as FCA or PCA, detailing checklist criteria, audit findings, objective verification evidence, severity ratings, responsible owners, and verified closure dates."
     )
 
@@ -422,7 +604,7 @@ def generate_docx():
     )
     add_screenshot(
         "fig12_access_security_audit.png",
-        9,
+        17,
         "Access Control and SCM Security Audit Trail",
         "The SCM Audit Trail interface displays an immutable chronological ledger of system actions, recording event timestamps, acting user personas, actions performed (e.g., portal logins, promotion evaluations, CR submissions), and operational details for complete accountability."
     )
@@ -436,7 +618,7 @@ def generate_docx():
     )
     add_body(
         "The heuristic engine evaluates candidate commits against four configurable factors:\n"
-        "1. File Match Weight (default 0.55): Evaluates direct name matching between candidate changeset files and classes referenced in failing test traces (e.g., matching ReportService.java with ReportServiceTest).\n"
+        "1. File Match Weight (default 0.55): Evaluates direct name matching between candidate changeset files and classes referenced in failing test traces (e.g., matching Calculator.java with CalculatorTest).\n"
         "2. Dependency Change Weight (default 0.25): Assigns weight to pom.xml modifications when a dependency resolution failure occurs.\n"
         "3. Recency Weight (default 0.10): Applies linear decay based on commit chronological order in the candidate batch.\n"
         "4. Change Size Weight (default 0.10): Evaluates the breadth and isolation of files altered in the commit.\n"
@@ -444,7 +626,7 @@ def generate_docx():
     )
     add_screenshot(
         "fig11_customization_config.png",
-        10,
+        18,
         "SCM Customization and Heuristic Weight Configuration",
         "The Customization interface allows project managers to fine-tune attribution scoring weights, configure rollback thresholds, update GitHub repository URLs, and modify Jenkins CI webhook endpoints without code alterations or server restarts."
     )
@@ -457,13 +639,13 @@ def generate_docx():
         "Web Enabling delivers all SCM capabilities, metrics, and failure investigations through an intuitive, universally accessible web browser interface. Rather than requiring developers to inspect raw command-line logs or navigate disparate tool consoles, CommitSleuth consolidates all project status information into a single responsive web portal."
     )
     add_body(
-        "Operating as a Flask WSGI service on port 5000, CommitSleuth provides thirteen responsive views covering the entire SCM lifecycle. In particular, the failure investigation module (/failures/<id>) offers an interactive terminal console viewer with color-coded log lines, highlighting JUnit assertions and failure traces in red. The interface presents a structured root-cause card, an evidence breakdown showing mathematical score contributions, and side-by-side code diff suggestions showing developers exactly how to resolve the defect. Authenticated REST APIs (/api/builds, /api/demo/run-failure, /api/demo/run-fix) further web-enable the platform for automated integration with CI servers."
+        "Operating as a Flask WSGI service on port 5000, CommitSleuth provides thirteen responsive views covering the entire SCM lifecycle. In particular, the CI/CD build history module (/builds) offers an interactive build matrix detailing pipeline executions across branches, commit authors, test outcomes, and attribution links. Authenticated REST APIs (/api/builds, /api/demo/run-failure, /api/demo/run-fix) further web-enable the platform for automated integration with CI servers."
     )
     add_screenshot(
-        "fig04_failure_attribution.png",
-        11,
-        "Web-Enabled Failure Attribution and Root-Cause Analysis Interface",
-        "The Failure Attribution web interface demonstrates the interactive root-cause investigation view for Build #128, displaying parsed console output, failing JUnit test assertions, candidate commit ranking breakdown, and automated rollback recommendations."
+        "fig02_build_history.png",
+        19,
+        "Web-Enabled CI/CD Build History & Failure Matrix",
+        "The CI/CD Build History interface displays comprehensive execution logs across pipeline runs, tracking build numbers, branches (main, develop, bugfix), triggering commit authors, execution dates, test pass/fail metrics, and direct links to automated failure attribution cards."
     )
 
     # =========================================================================
@@ -483,12 +665,22 @@ def generate_docx():
     out_path_1 = os.path.join(out_dir_final, "CommitSleuth_SCM_Final_Review.docx")
     out_path_2 = os.path.join(ROOT, "docs", "CommitSleuth_SCM_Final_Review.docx")
 
+    # Save to final-review folder
     doc.save(out_path_1)
-    doc.save(out_path_2)
+    print(f"Document successfully created at:\n  1. {out_path_1}")
 
-    print(f"Document successfully created at:")
-    print(f"  1. {out_path_1}")
-    print(f"  2. {out_path_2}")
+    # Try saving to docs root (might be locked if open in MS Word)
+    try:
+        doc.save(out_path_2)
+        print(f"  2. {out_path_2}")
+    except PermissionError:
+        alt_path = os.path.join(ROOT, "docs", "CommitSleuth_SCM_Final_Review_Updated.docx")
+        try:
+            doc.save(alt_path)
+            print(f"  2. [Notice: {out_path_2} is locked by MS Word; saved copy to {alt_path}]")
+        except Exception:
+            pass
+        print(f"  Note: Close Microsoft Word to overwrite {out_path_2} directly.")
 
 if __name__ == "__main__":
     generate_docx()

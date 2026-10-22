@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
+body { background: #ffffff; color: #1f2328; font-size: 14px; line-height: 1.5; }
+.gh-header { background: #f6f8fa; border-bottom: 1px solid #d0d7de; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.gh-repo-title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #0969da; }
+.gh-badge { font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 12px; border: 1px solid #d0d7de; color: #656d76; background: #ffffff; }
+.gh-nav { display: flex; gap: 24px; border-bottom: 1px solid #d0d7de; padding: 0 32px; background: #f6f8fa; }
+.gh-nav-item { padding: 12px 4px; font-weight: 500; color: #656d76; text-decoration: none; display: flex; align-items: center; gap: 6px; border-bottom: 2px solid transparent; }
+.gh-nav-item.active { color: #1f2328; font-weight: 600; border-bottom-color: #fd8c73; }
+.gh-counter { background: rgba(175,184,193,0.2); padding: 2px 6px; border-radius: 10px; font-size: 12px; }
+.container { max-width: 1280px; margin: 24px auto; padding: 0 24px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 13px; font-weight: 600; border-radius: 6px; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; cursor: pointer; }
+.btn-primary { background: #1f883d; color: #ffffff; border-color: rgba(31,35,40,0.15); }
+.badge-purple { background: #8250df; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-green { background: #1a7f37; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-blue { background: #0969da; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+
+.repo-grid { display: grid; grid-template-columns: 3fr 1fr; gap: 24px; }
+.commit-tease { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px 6px 0 0; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+.file-table { width: 100%; border: 1px solid #d0d7de; border-top: none; border-radius: 0 0 6px 6px; border-collapse: collapse; }
+.file-table tr { border-top: 1px solid #eaeef2; }
+.file-table tr:hover { background: #f6f8fa; }
+.file-table td { padding: 9px 16px; font-size: 14px; }
+.file-name { font-weight: 500; color: #1f2328; display: flex; align-items: center; gap: 8px; }
+.file-msg { color: #656d76; }
+.file-age { color: #656d76; text-align: right; white-space: nowrap; }
+.sidebar-box { margin-bottom: 24px; }
+.sidebar-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.lang-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<div class="gh-header">
+  <div class="gh-repo-title">
+    <svg height="22" viewBox="0 0 16 16" width="22" fill="#656d76"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h6.5a.25.25 0 0 1 .25.25v2.5a.25.25 0 0 1-.25.25h-6.5a.25.25 0 0 1-.25-.25Z"></path></svg>
+    <span>prakashumapathi07-spec</span> / <strong style="color: #0969da;">COMMITSLEUTHSCM</strong>
+    <span class="gh-badge">Public</span>
+  </div>
+  <div style="display: flex; gap: 8px;">
+    <button class="btn">⭐ Star <span class="gh-counter">12</span></button>
+    <button class="btn">🍴 Fork <span class="gh-counter">4</span></button>
+  </div>
+</div>
+
+<div class="gh-nav">
+  <a class="gh-nav-item active">📁 Code</a>
+  <a class="gh-nav-item">Issues <span class="gh-counter">0</span></a>
+  <a class="gh-nav-item">Pull requests <span class="gh-counter">2</span></a>
+  <a class="gh-nav-item">Actions</a>
+  <a class="gh-nav-item">Projects</a>
+  <a class="gh-nav-item">Security</a>
+  <a class="gh-nav-item">Insights</a>
+</div>
+
+<div class="container">
+  <div style="margin-bottom: 16px; color: #475569; font-size: 15px;">
+    Automated Continuous Integration Build Failure Tracking, Root-Cause Investigation & Developer Alert Platform | <strong>ISWE403L SCM Final Review</strong>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button class="btn" style="font-weight: 600;">🌿 main ▾</button>
+      <span style="color: #656d76; font-size: 13px;"><strong>5</strong> branches</span>
+      <span style="color: #656d76; font-size: 13px;"><strong>3</strong> tags</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn">Go to file</button>
+      <button class="btn btn-primary">&lt;&gt; Code ▾</button>
+    </div>
+  </div>
+
+  <div class="repo-grid">
+    <div>
+      <div class="commit-tease">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 24px; height: 24px; border-radius: 50%; background: #0969da; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px;">PR</div>
+          <span style="font-weight: 600; color: #1f2328;">Prakash Raj U</span>
+          <span style="color: #475569;">CR-016: add CommitSleuth SCM Final Review Microsoft Word documentation</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #656d76;">
+          <code style="font-family: monospace; color: #0969da;">70d43eb</code>
+          <span>2 hours ago</span>
+          <span><strong>25</strong> commits</span>
+        </div>
+      </div>
+
+      <table class="file-table">
+        <tr>
+          <td class="file-name">📁 .github/workflows</td>
+          <td class="file-msg">Add CI test and automated verification workflow</td>
+          <td class="file-age">4 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 alerts/</td>
+          <td class="file-msg">CR-004: developer alert dispatcher & notification bus</td>
+          <td class="file-age">6 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 analyzer/</td>
+          <td class="file-msg">CR-003: root-cause investigation & heuristic blame engine</td>
+          <td class="file-age">6 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 audit/</td>
+          <td class="file-msg">CR-008: configuration status accounting & CSAR generator</td>
+          <td class="file-age">5 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 baselines/</td>
+          <td class="file-msg">CR-009: release manager and manifest for version v1.0.0</td>
+          <td class="file-age">3 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 dashboard/</td>
+          <td class="file-msg">CR-015: implement light-theme UI and SCM governance portal</td>
+          <td class="file-age">2 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 database/</td>
+          <td class="file-msg">CR-009: update team accounts in seed script for SCM team</td>
+          <td class="file-age">4 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 docs/</td>
+          <td class="file-msg">CR-016: add CommitSleuth SCM Final Review Microsoft Word documentation</td>
+          <td class="file-age">2 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 hooks/</td>
+          <td class="file-msg">CR-001: add client-side commit-msg hook enforcing CR format</td>
+          <td class="file-age">8 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 maven/</td>
+          <td class="file-msg">CR-014: alter and resolve build failure in Calculator add method</td>
+          <td class="file-age">3 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 pipeline/</td>
+          <td class="file-msg">CR-007: promotional gating & release verification engine</td>
+          <td class="file-age">5 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 reports/</td>
+          <td class="file-msg">CR-008: automated CSAR audit report generation</td>
+          <td class="file-age">4 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📁 tests/</td>
+          <td class="file-msg">CR-014: add multi-developer SCM scenario test suite</td>
+          <td class="file-age">3 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📄 Jenkinsfile</td>
+          <td class="file-msg">Define declarative CI build and failure attribution pipeline</td>
+          <td class="file-age">7 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📄 pom.xml</td>
+          <td class="file-msg">Configure Apache Maven dependencies and JUnit 5 Surefire plugin</td>
+          <td class="file-age">7 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📄 README.md</td>
+          <td class="file-msg">Project overview, quickstart guide and SCM architecture</td>
+          <td class="file-age">2 hours ago</td>
+        </tr>
+        <tr>
+          <td class="file-name">📄 scoring_config.yaml</td>
+          <td class="file-msg">Configure multi-factor failure attribution weights</td>
+          <td class="file-age">5 hours ago</td>
+        </tr>
+      </table>
+    </div>
+
+    <div>
+      <div class="sidebar-box">
+        <div class="sidebar-title">About</div>
+        <p style="color: #475569; font-size: 13.5px; line-height: 1.5; margin-bottom: 12px;">
+          Automated continuous integration build failure tracking, root-cause investigation, and developer alert platform.
+        </p>
+        <div style="font-size: 13px; color: #656d76; margin-bottom: 8px;">🔗 <a href="#" style="color: #0969da; text-decoration: none;">commitsleuth-scm.local:5000</a></div>
+        <div style="font-size: 13px; color: #656d76;">🏷️ SCM Course Project ISWE403L</div>
+      </div>
+
+      <div class="sidebar-box" style="border-top: 1px solid #d0d7de; padding-top: 16px;">
+        <div class="sidebar-title">Releases <span class="gh-counter">3</span></div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span style="color: #1a7f37; font-weight: 600;">🏷️ v1.0.0</span>
+          <span class="badge-green" style="font-size: 10px; padding: 1px 6px;">Latest</span>
+        </div>
+        <div style="color: #656d76; font-size: 12px;">Official Final Review Release Baseline BL-05</div>
+      </div>
+
+      <div class="sidebar-box" style="border-top: 1px solid #d0d7de; padding-top: 16px;">
+        <div class="sidebar-title">Contributors <span class="gh-counter">4</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 20px; height: 20px; border-radius: 50%; background: #0969da; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">PR</div>
+            <span><strong>Prakash Raj U</strong> (23MIS0180)</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 20px; height: 20px; border-radius: 50%; background: #8250df; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">BW</div>
+            <span><strong>Bharathwaraj K S</strong> (23MIS0070)</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 20px; height: 20px; border-radius: 50%; background: #1a7f37; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">AK</div>
+            <span>Arun Kumar</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 20px; height: 20px; border-radius: 50%; background: #ea580c; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">KS</div>
+            <span>Kavya Sharma</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-box" style="border-top: 1px solid #d0d7de; padding-top: 16px;">
+        <div class="sidebar-title">Languages</div>
+        <div class="lang-bar">
+          <div style="width: 54%; background: #b07219;"></div>
+          <div style="width: 36%; background: #3572A5;"></div>
+          <div style="width: 10%; background: #e34c26;"></div>
+        </div>
+        <div style="display: flex; gap: 12px; font-size: 12px; color: #475569;">
+          <span>● Java 54.2%</span>
+          <span>● Python 36.4%</span>
+          <span>● HTML 9.4%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

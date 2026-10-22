@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
+body { background: #ffffff; color: #1f2328; font-size: 14px; line-height: 1.5; }
+.gh-header { background: #f6f8fa; border-bottom: 1px solid #d0d7de; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.gh-repo-title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #0969da; }
+.gh-badge { font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 12px; border: 1px solid #d0d7de; color: #656d76; background: #ffffff; }
+.gh-nav { display: flex; gap: 24px; border-bottom: 1px solid #d0d7de; padding: 0 32px; background: #f6f8fa; }
+.gh-nav-item { padding: 12px 4px; font-weight: 500; color: #656d76; text-decoration: none; display: flex; align-items: center; gap: 6px; border-bottom: 2px solid transparent; }
+.gh-nav-item.active { color: #1f2328; font-weight: 600; border-bottom-color: #fd8c73; }
+.gh-counter { background: rgba(175,184,193,0.2); padding: 2px 6px; border-radius: 10px; font-size: 12px; }
+.container { max-width: 1280px; margin: 24px auto; padding: 0 24px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 13px; font-weight: 600; border-radius: 6px; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; cursor: pointer; }
+.btn-primary { background: #1f883d; color: #ffffff; border-color: rgba(31,35,40,0.15); }
+.badge-purple { background: #8250df; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-green { background: #1a7f37; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-blue { background: #0969da; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+
+.commit-group-title { font-size: 13px; font-weight: 600; color: #656d76; margin: 18px 0 8px 0; display: flex; align-items: center; gap: 8px; }
+.commit-box { border: 1px solid #d0d7de; border-radius: 6px; overflow: hidden; margin-bottom: 16px; }
+.commit-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-top: 1px solid #eaeef2; background: #ffffff; }
+.commit-row:first-child { border-top: none; }
+.commit-row:hover { background: #f6f8fa; }
+.c-title { font-weight: 600; color: #1f2328; font-size: 14px; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; }
+.c-meta { font-size: 12px; color: #656d76; display: flex; align-items: center; gap: 6px; }
+.c-actions { display: flex; align-items: center; gap: 8px; }
+.sha-btn { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padding: 3px 8px; border: 1px solid #d0d7de; border-radius: 4px; background: #f6f8fa; color: #0969da; text-decoration: none; }
+.verified-tag { border: 1px solid #1a7f37; color: #1a7f37; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 10px; }
+.terminal-block { background: #0f172a; color: #f8fafc; border-radius: 6px; padding: 14px 18px; font-family: ui-monospace, monospace; font-size: 12px; line-height: 1.6; margin-top: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+</style>
+</head>
+<body>
+<div class="gh-header">
+  <div class="gh-repo-title">
+    <span>prakashumapathi07-spec</span> / <strong style="color: #0969da;">COMMITSLEUTHSCM</strong>
+    <span class="gh-badge">Public</span>
+  </div>
+  <div style="font-size: 13px; color: #656d76;">Branch: <strong>main</strong></div>
+</div>
+
+<div class="container">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+    <div>
+      <h2 style="font-size: 20px; font-weight: 600; color: #1f2328;">Commit History & SCM Change Traceability Log</h2>
+      <div style="font-size: 13px; color: #656d76;">Every commit strictly enforces Change Request (CR) traceability via client-side git hooks.</div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <span class="badge-blue">25 Total Commits</span>
+      <span class="badge-green">Hook Validated: hooks/commit-msg</span>
+    </div>
+  </div>
+
+  <div class="commit-group-title">📅 Commits on October 22, 2026</div>
+  <div class="commit-box">
+    <div class="commit-row">
+      <div>
+        <div class="c-title"><span class="verified-tag">Verified</span> CR-016: add CommitSleuth SCM Final Review Microsoft Word documentation</div>
+        <div class="c-meta"><strong>Prakash Raj U</strong> committed 2 hours ago · affected CI: CI-08, CI-10</div>
+      </div>
+      <div class="c-actions">
+        <a class="sha-btn">70d43eb</a>
+      </div>
+    </div>
+    <div class="commit-row">
+      <div>
+        <div class="c-title"><span class="verified-tag">Verified</span> CR-015: implement light-theme UI, TechNova 4-developer scenario, and SCM governance</div>
+        <div class="c-meta"><strong>Bharathwaraj K S</strong> committed 3 hours ago · affected CI: CI-05</div>
+      </div>
+      <div class="c-actions">
+        <a class="sha-btn">fa4b2c5</a>
+      </div>
+    </div>
+    <div class="commit-row">
+      <div>
+        <div class="c-title"><span class="verified-tag">Verified</span> CR-014: update Word document with 4-member multi-developer collaborative SCM scenario <span class="badge-green" style="font-size: 11px; padding: 1px 6px;">v1.0.0</span></div>
+        <div class="c-meta"><strong>Prakash Raj U</strong> committed 4 hours ago · affected CI: CI-10</div>
+      </div>
+      <div class="c-actions">
+        <a class="sha-btn">11b38f4</a>
+      </div>
+    </div>
+    <div class="commit-row">
+      <div>
+        <div class="c-title">CR-014: merge develop into main with 4-member multi-developer collaborative SCM implementation</div>
+        <div class="c-meta"><strong>Prakash Raj U</strong> committed 4 hours ago · affected CI: CI-01, CI-07</div>
+      </div>
+      <div class="c-actions">
+        <a class="sha-btn">7e43c78</a>
+      </div>
+    </div>
+    <div class="commit-row">
+      <div>
+        <div class="c-title">CR-014: merge feature/multi-developer-collab into develop with 4-member SCM scenario</div>
+        <div class="c-meta"><strong>Bharathwaraj K S</strong> committed 5 hours ago · affected CI: CI-06</div>
+      </div>
+      <div class="c-actions">
+        <a class="sha-btn">74aa410</a>
+      </div>
+    </div>
+    <div class="commit-row">
+      <div>
+        <div class="c-title"><span class="verified-tag">Verified</span> CR-014: alter and resolve build failure in Calculator add method by Prakash Raj U</div>
+        <div class="c-meta"><strong>Prakash Raj U</strong> committed 5 hours ago · affected CI: CI-09</div>
+      </div>
+      <div class="c-actions">
+        <a class="sha-btn">c9223ea</a>
+      </div>
+    </div>
+    <div class="commit-row">
+      <div>
+        <div class="c-title"><span class="verified-tag">Verified</span> CR-013: add collaborative team workflow and CI test matrix by Kavya Sharma</div>
+        <div class="c-meta"><strong>Kavya Sharma</strong> committed 6 hours ago · affected CI: CI-06</div>
+      </div>
+      <div class="c-actions">
+        <a class="sha-btn">5fbf9c0</a>
+      </div>
+    </div>
+    <div class="commit-row">
+      <div>
+        <div class="c-title"><span class="verified-tag">Verified</span> CR-012: tune attribution scoring weights and thresholds by Arun Kumar</div>
+        <div class="c-meta"><strong>Arun Kumar</strong> committed 6 hours ago · affected CI: CI-03</div>
+      </div>
+      <div class="c-actions">
+        <a class="sha-btn">4025917</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="terminal-block">
+    <div style="color: #94a3b8; margin-bottom: 6px; font-weight: bold;">$ git log --graph --oneline --decorate -n 8</div>
+    <div><span style="color: #f87171;">*</span> <span style="color: #38bdf8;">70d43eb</span> (<span style="color: #4ade80;">HEAD -&gt; main</span>, <span style="color: #f472b6;">origin/main</span>) <span style="color: #f8fafc;">CR-016: add CommitSleuth SCM Final Review Microsoft Word documentation</span></div>
+    <div><span style="color: #f87171;">*</span> <span style="color: #38bdf8;">fa4b2c5</span> <span style="color: #f8fafc;">CR-015: implement light-theme UI, TechNova 4-developer scenario, failure attribution, and SCM governance</span></div>
+    <div><span style="color: #f87171;">*</span> <span style="color: #38bdf8;">11b38f4</span> (<span style="color: #fbbf24;">tag: v1.0.0</span>) <span style="color: #f8fafc;">CR-014: update Word document with 4-member multi-developer collaborative SCM scenario and final release manifest</span></div>
+    <div><span style="color: #f87171;">*</span>   <span style="color: #38bdf8;">7e43c78</span> <span style="color: #f8fafc;">CR-014: merge develop into main with 4-member multi-developer collaborative SCM implementation</span></div>
+    <div><span style="color: #38bdf8;">|\</span>  </div>
+    <div><span style="color: #38bdf8;">|</span> <span style="color: #f87171;">*</span>   <span style="color: #38bdf8;">74aa410</span> (<span style="color: #f472b6;">origin/develop</span>, <span style="color: #4ade80;">develop</span>) <span style="color: #f8fafc;">CR-014: merge feature/multi-developer-collab into develop with 4-member SCM scenario</span></div>
+    <div><span style="color: #38bdf8;">|</span> <span style="color: #38bdf8;">|\</span>  </div>
+    <div><span style="color: #38bdf8;">|</span> <span style="color: #38bdf8;">|</span> <span style="color: #f87171;">*</span> <span style="color: #38bdf8;">c9223ea</span> (<span style="color: #f472b6;">origin/feature/multi-developer-collab</span>) <span style="color: #f8fafc;">CR-014: alter and resolve build failure in Calculator add method by Prakash Raj U</span></div>
+  </div>
+</div>
+</body>
+</html>

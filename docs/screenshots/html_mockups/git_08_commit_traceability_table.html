@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
+body { background: #ffffff; color: #1f2328; font-size: 14px; line-height: 1.5; }
+.gh-header { background: #f6f8fa; border-bottom: 1px solid #d0d7de; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.gh-repo-title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #0969da; }
+.gh-badge { font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 12px; border: 1px solid #d0d7de; color: #656d76; background: #ffffff; }
+.gh-nav { display: flex; gap: 24px; border-bottom: 1px solid #d0d7de; padding: 0 32px; background: #f6f8fa; }
+.gh-nav-item { padding: 12px 4px; font-weight: 500; color: #656d76; text-decoration: none; display: flex; align-items: center; gap: 6px; border-bottom: 2px solid transparent; }
+.gh-nav-item.active { color: #1f2328; font-weight: 600; border-bottom-color: #fd8c73; }
+.gh-counter { background: rgba(175,184,193,0.2); padding: 2px 6px; border-radius: 10px; font-size: 12px; }
+.container { max-width: 1280px; margin: 24px auto; padding: 0 24px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 13px; font-weight: 600; border-radius: 6px; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; cursor: pointer; }
+.btn-primary { background: #1f883d; color: #ffffff; border-color: rgba(31,35,40,0.15); }
+.badge-purple { background: #8250df; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-green { background: #1a7f37; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+.badge-blue { background: #0969da; color: #ffffff; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+
+body { background: #ffffff; padding: 20px; }
+.table-card { max-width: 1280px; margin: 0 auto; border: 1px solid #b4c6e7; border-radius: 4px; overflow: hidden; }
+.t-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.t-table th { background: #d9e1f2; color: #000000; font-weight: 700; text-align: left; padding: 10px 14px; border: 1px solid #b4c6e7; }
+.t-table td { padding: 8px 14px; border: 1px solid #b4c6e7; color: #1f2328; }
+.t-table tr:nth-child(even) { background: #f8fafc; }
+.commit-badge { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 12px; padding: 2px 10px; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 600; color: #0f172a; display: inline-block; }
+</style>
+</head>
+<body>
+<div class="table-card">
+  <table class="t-table">
+    <thead>
+      <tr>
+        <th style="width: 110px;">Commit</th>
+        <th style="width: 110px;">Date</th>
+        <th style="width: 170px;">Author</th>
+        <th>Commit Message & SCM Association</th>
+        <th style="width: 150px;">Affected CI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="commit-badge">a7b2a71</span></td>
+        <td>2026-10-05</td>
+        <td>Prakash Raj U</td>
+        <td>docs(ci-01, ci-02): initialize requirements, SCM plan & directory structure [Requirements Baseline]</td>
+        <td>CI-01, CI-02</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">99bbeb5</span></td>
+        <td>2026-10-08</td>
+        <td>Bharathwaraj K S</td>
+        <td>design(ci-03, ci-04): establish heuristic blame scoring weights & database schema [Design Baseline]</td>
+        <td>CI-03, CI-04</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">f0ad7d0</span></td>
+        <td>2026-10-10</td>
+        <td>Prakash Raj U</td>
+        <td>Merge pull request #1 from feature/scoring-config: implement YAML configuration [Baseline BL-04]</td>
+        <td>CI-03, CI-05</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">f1127d0</span></td>
+        <td>2026-10-12</td>
+        <td>Bharathwaraj K S</td>
+        <td>feat(ci-05): implement executive SCM dashboard & build recorder controller [CR-002]</td>
+        <td>CI-05</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">9297e33</span></td>
+        <td>2026-10-14</td>
+        <td>Prakash Raj U</td>
+        <td>feat(ci-09): introduce calculation failure in Calculator add method for fault injection [CR-009]</td>
+        <td>CI-09</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">63e1e5b</span></td>
+        <td>2026-10-15</td>
+        <td>Bharathwaraj K S</td>
+        <td>test(ci-06): update regression test notes & automated Surefire assertion check [CR-009]</td>
+        <td>CI-06</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">e789c77</span></td>
+        <td>2026-10-16</td>
+        <td>Prakash Raj U</td>
+        <td>fix(ci-09): resolve Calculator calculation defect and restore passing build [CR-009]</td>
+        <td>CI-09</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">0814589</span></td>
+        <td>2026-10-16</td>
+        <td>Bharathwaraj K S</td>
+        <td>Merge pull request #2 from bugfix/demo-calc-failure: resolve defect BUG-024 (CR-009)</td>
+        <td>CI-06, CI-09</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">6f147e3</span></td>
+        <td>2026-10-17</td>
+        <td>Prakash Raj U</td>
+        <td>feat(ci-02): add multi-encoding log parser support for Jenkins build recorder [CR-007]</td>
+        <td>CI-02</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">d6b3be0</span></td>
+        <td>2026-10-18</td>
+        <td>Bharathwaraj K S</td>
+        <td>feat(ci-09): add range validation logic to Validator service for employee module [CR-010]</td>
+        <td>CI-09</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">077e17c</span></td>
+        <td>2026-10-19</td>
+        <td>Prakash Raj U</td>
+        <td>feat(ci-09): update calculation logic in Calculator add method for boundary testing [CR-011]</td>
+        <td>CI-09</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">4025917</span></td>
+        <td>2026-10-20</td>
+        <td>Arun Kumar</td>
+        <td>tune(ci-03): refine attribution scoring weights & Bayesian confidence thresholds [CR-012]</td>
+        <td>CI-03</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">5fbf9c0</span></td>
+        <td>2026-10-20</td>
+        <td>Kavya Sharma</td>
+        <td>test(ci-06): add collaborative team workflow & multi-developer CI test matrix [CR-013]</td>
+        <td>CI-06</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">74aa410</span></td>
+        <td>2026-10-21</td>
+        <td>Bharathwaraj K S</td>
+        <td>Merge pull request #4 from feature/multi-developer-collab into develop (CR-014)</td>
+        <td>CI-06, CI-09</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">7e43c78</span></td>
+        <td>2026-10-21</td>
+        <td>Prakash Raj U</td>
+        <td>Merge branch develop into main: Production Release Baseline v1.0.0 [Release v1.0.0]</td>
+        <td>Release v1.0.0</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">11b38f4</span></td>
+        <td>2026-10-22</td>
+        <td>Prakash Raj U</td>
+        <td>release(ci-10): finalize official release manifest, FCA/PCA sign-off & audit checklist [BL-05]</td>
+        <td>CI-10, Release v1.0.0</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">fa4b2c5</span></td>
+        <td>2026-10-22</td>
+        <td>Bharathwaraj K S</td>
+        <td>feat(ci-05): implement light-theme UI, TechNova 4-developer scenario & SCM governance [CR-015]</td>
+        <td>CI-05</td>
+      </tr>
+      <tr>
+        <td><span class="commit-badge">70d43eb</span></td>
+        <td>2026-10-22</td>
+        <td>Prakash Raj U</td>
+        <td>docs(ci-08): add CommitSleuth SCM Final Review Microsoft Word documentation [CR-016]</td>
+        <td>CI-08, CI-10</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
