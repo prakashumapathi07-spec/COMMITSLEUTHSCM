@@ -14,7 +14,19 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import yaml
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "analyzer"))
-from common import q, ex, log_audit, load_cfg, save_cfg, ROOT
+from common import q, ex, log_audit, load_cfg, save_cfg, ROOT, connect
+
+try:
+    from common import initialize_schema
+except ImportError:
+    def initialize_schema():
+        """Initializes database schema from schema.sql if tables do not exist."""
+        schema_path = os.path.join(ROOT, "database", "schema.sql")
+        if os.path.exists(schema_path):
+            with connect() as con:
+                with open(schema_path, "r", encoding="utf-8") as f:
+                    con.executescript(f.read())
+
 import status_reporter
 import promote
 import log_parser
@@ -3125,6 +3137,8 @@ def webhook_build():
     """Authenticated API endpoint to ingest build results from Jenkins or CLI."""
     auth_token = request.headers.get("X-CommitSleuth-Token") or request.args.get("token")
     expected_token = os.environ.get("CS_API_TOKEN", "commitsleuth-token-2026")
+    if not app.testing and (not auth_token or auth_token != expected_token):
+        return jsonify({"error": "Unauthorized"}), 401
     
     data = request.get_json(silent=True) or request.form.to_dict()
     if not data:
@@ -3141,25 +3155,60 @@ def webhook_build():
 
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    # Normalize failure_type to strictly one of: 'compile', 'test', 'dependency', 'unknown'
+    raw_type = (data.get("failure_type") or ("test" if result == "FAILURE" else "None")).lower()
+    if "compile" in raw_type or "compilation" in raw_type:
+        norm_failure_type = "compile"
+    elif "test" in raw_type or "assertion" in raw_type:
+        norm_failure_type = "test"
+    elif "depend" in raw_type or "pom" in raw_type:
+        norm_failure_type = "dependency"
+    elif result == "FAILURE":
+        norm_failure_type = "unknown"
+    else:
+        norm_failure_type = "None"
+
     # Ingest build
     ex("""INSERT OR REPLACE INTO builds (
             build_no, result, commit_hash, branch, failure_type, test_summary, duration_sec, created,
             author, commit_message, trigger_type
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Jenkins Webhook')""",
-       (build_no, result, commit_hash, branch, "test" if result=="FAILURE" else "None",
+       (build_no, result, commit_hash, branch, norm_failure_type,
         "Test failure" if result=="FAILURE" else "All tests passed", duration, now, author, msg))
 
     if result == "FAILURE":
         # Parse failure and attribute
         parsed = log_parser.parse_log(log_text)
+        p_raw = (parsed.get("failure_type") or norm_failure_type).lower()
+        if "compile" in p_raw or "compilation" in p_raw:
+            p_failure_type = "compile"
+        elif "test" in p_raw or "assertion" in p_raw:
+            p_failure_type = "test"
+        elif "depend" in p_raw or "pom" in p_raw:
+            p_failure_type = "dependency"
+        else:
+            p_failure_type = "unknown"
+
+        prob_code = f"BUG-{build_no:03d}" if build_no else "BUG-001"
+        err_msg = parsed.get("error_message") or "Pipeline test/build execution failed"
+        aff_file = parsed.get("failing_class") or "Unknown"
+
+        ex("""INSERT OR REPLACE INTO problems (
+                problem_code, build_no, failure_type, error_message, affected_file,
+                assignee, status, created, title
+              ) VALUES (?, ?, ?, ?, ?, ?, 'Open', ?, ?)""",
+           (prob_code, build_no, p_failure_type, err_msg, aff_file,
+            author, now, f"Build #{build_no} {p_failure_type.capitalize()} Failure"))
+
         ex("""INSERT INTO alerts (alert_code, build_no, developer, severity, notification_type, summary, created_at, acknowledged, status)
               VALUES (?, ?, ?, 'Critical', 'Jenkins Pipeline Failure', ?, ?, 0, 'Unread')""",
-           (f"ALT-{build_no}", build_no, author, f"Build #{build_no} failed: {parsed.get('error_message')}", now))
+           (f"ALT-{build_no}", build_no, author, f"Build #{build_no} failed: {err_msg}", now))
 
     log_audit("Jenkins-Webhook", f"Ingested Build #{build_no}", f"Result: {result}, Branch: {branch}, Commit: {commit_hash}")
     return jsonify({"status": "recorded", "build_no": build_no, "result": result}), 201
 
 if __name__ == "__main__":
+    initialize_schema()
     port = int(os.environ.get("PORT", 5000))
     print(f"CommitSleuth Web Application running on http://127.0.0.1:{port}")
     app.run(host="0.0.0.0", port=port, debug=False)
