@@ -1,4 +1,3 @@
-
 /*
  * CommitSleuth SCM Declarative CI Pipeline
  * Course: ISWE403L — Software Configuration Management
@@ -18,7 +17,7 @@ pipeline {
     agent any
 
     tools {
-        // Must match the names configured in Jenkins > Tools.
+        // Names must match Jenkins > Manage Jenkins > Tools.
         maven 'Maven'
         jdk 'jdk-23'
     }
@@ -36,9 +35,11 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout & SCM Identification') {
             steps {
                 echo '=== Stage 1: Checkout Source and Verify Configuration Baseline ==='
+
                 checkout scm
 
                 script {
@@ -65,6 +66,7 @@ pipeline {
         stage('Environment & Configuration Verification') {
             steps {
                 echo '=== Stage 2: Verify Java, Maven and Python ==='
+
                 script {
                     runCmd('java -version')
                     runCmd('mvn -version')
@@ -81,6 +83,7 @@ pipeline {
         stage('Maven Dependency Resolution') {
             steps {
                 echo '=== Stage 3: Maven Dependency Resolution ==='
+
                 script {
                     runCmd('mvn -B -f maven/pom.xml dependency:resolve')
                 }
@@ -90,6 +93,7 @@ pipeline {
         stage('Maven Clean & Compile') {
             steps {
                 echo '=== Stage 4: Clean Compilation ==='
+
                 script {
                     runCmd('mvn -B -f maven/pom.xml clean compile')
                 }
@@ -99,6 +103,7 @@ pipeline {
         stage('Unit Testing & Test Report') {
             steps {
                 echo '=== Stage 5: Execute JUnit Tests ==='
+
                 script {
                     runCmd('mvn -B -f maven/pom.xml test')
                 }
@@ -108,6 +113,7 @@ pipeline {
         stage('Publish Test Evidence') {
             steps {
                 echo '=== Stage 6: Publish Surefire Test Reports ==='
+
                 junit(
                     testResults: 'maven/target/surefire-reports/*.xml',
                     allowEmptyResults: true
@@ -118,12 +124,14 @@ pipeline {
         stage('Promote to Testing') {
             when {
                 expression {
-                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: '') ==~
-                        /.*(develop|release).*/
+                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: '')
+                        .matches('.*(develop|release).*')
                 }
             }
+
             steps {
                 echo '=== Stage 7A: Development to Testing ==='
+
                 script {
                     if (isUnix()) {
                         runCmd(
@@ -141,12 +149,14 @@ pipeline {
         stage('Promote to Production') {
             when {
                 expression {
-                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: '') ==~
-                        /.*main.*/
+                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main')
+                        .contains('main')
                 }
             }
+
             steps {
                 echo '=== Stage 7B: Testing to Production ==='
+
                 script {
                     if (isUnix()) {
                         runCmd(
@@ -165,6 +175,7 @@ pipeline {
     post {
         success {
             echo '=== Build Succeeded: Recording SCM Status ==='
+
             script {
                 if (isUnix()) {
                     runCmd(
@@ -180,6 +191,7 @@ pipeline {
 
         failure {
             echo '=== Build Failed: Recording Failure Information ==='
+
             script {
                 if (isUnix()) {
                     runCmd(
@@ -195,6 +207,7 @@ pipeline {
 
         always {
             echo '=== Archiving SCM Evidence and Build Logs ==='
+
             archiveArtifacts(
                 artifacts: 'build.log, reports/**',
                 allowEmptyArchive: true
