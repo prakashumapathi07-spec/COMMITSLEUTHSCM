@@ -1,6 +1,10 @@
-// CommitSleuth SCM Declarative CI Pipeline
-// Course: ISWE403L — Software Configuration Management
-// Integrates Git, Jenkins, Maven, Python Failure Attribution, and SCM Status Accounting
+
+/*
+ * CommitSleuth SCM Declarative CI Pipeline
+ * Course: ISWE403L — Software Configuration Management
+ * Integrates Git, Jenkins, Maven, Python Failure Attribution,
+ * and SCM Status Accounting.
+ */
 
 def runCmd(cmd) {
     if (isUnix()) {
@@ -14,15 +18,14 @@ pipeline {
     agent any
 
     tools {
-        // Uses default Maven and JDK if configured in Jenkins Global Tool Configuration
-        maven 'Maven 3.9'
-        jdk 'JDK 17'
+        // Names must match Jenkins > Manage Jenkins > Tools.
+        maven 'Maven'
+        jdk 'jdk-23'
     }
 
     environment {
-        // Auto-resolves relative to current workspace if CS_DB is not explicitly injected
         CS_DB = "${WORKSPACE}/database/commitsleuth.db"
-        PYTHONIOENCODING = "utf-8"
+        PYTHONIOENCODING = 'utf-8'
     }
 
     options {
@@ -36,24 +39,35 @@ pipeline {
             steps {
                 echo '=== Stage 1: Checkout Source and Verify Configuration Baseline ==='
                 checkout scm
+
                 script {
-                    def commitHash = ""
+                    def commitHash
+
                     if (isUnix()) {
-                        commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+                        commitHash = sh(
+                            returnStdout: true,
+                            script: 'git rev-parse --short HEAD'
+                        ).trim()
                     } else {
-                        commitHash = bat(returnStdout: true, script: '@git rev-parse --short HEAD').trim()
+                        commitHash = bat(
+                            returnStdout: true,
+                            script: '@git rev-parse --short HEAD'
+                        ).trim()
                     }
-                    echo "Checking out commit: ${commitHash} on branch: ${env.GIT_BRANCH ?: 'local'}"
+
+                    echo "Checking out commit: ${commitHash}"
+                    echo "Branch: ${env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'local'}"
                 }
             }
         }
 
         stage('Environment & Configuration Verification') {
             steps {
-                echo '=== Stage 2: SCM Environment Verification ==='
+                echo '=== Stage 2: Verify Java, Maven and Python ==='
                 script {
-                    runCmd('python --version')
+                    runCmd('java -version')
                     runCmd('mvn -version')
+                    runCmd('python --version')
                 }
             }
         }
@@ -69,18 +83,18 @@ pipeline {
 
         stage('Maven Clean & Compile') {
             steps {
-                echo '=== Stage 4: Clean Compilation of Java Application ==='
+                echo '=== Stage 4: Clean Compilation ==='
                 script {
-                    runCmd('mvn -B -f maven/pom.xml clean compile > build.log 2>&1')
+                    runCmd('mvn -B -f maven/pom.xml clean compile')
                 }
             }
         }
 
         stage('Unit Testing & Test Report') {
             steps {
-                echo '=== Stage 5: Execute JUnit Tests with Maven Surefire ==='
+                echo '=== Stage 5: Execute JUnit Tests ==='
                 script {
-                    runCmd('mvn -B -f maven/pom.xml test >> build.log 2>&1')
+                    runCmd('mvn -B -f maven/pom.xml test')
                 }
             }
         }
@@ -88,30 +102,43 @@ pipeline {
         stage('Publish Test Evidence') {
             steps {
                 echo '=== Stage 6: Publish Surefire Test Reports ==='
-                junit testResults: '**/maven/target/surefire-reports/*.xml', allowEmptyResults: true
+                junit(
+                    testResults: 'maven/target/surefire-reports/*.xml',
+                    allowEmptyResults: true
+                )
             }
         }
 
         stage('Promote to Testing') {
             when {
-                expression { env.GIT_BRANCH ==~ /.*(develop|release).*/ }
+                expression {
+                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: '') ==
+                       ~ /.*(develop|release).*/
+                }
             }
             steps {
-                echo '=== Stage 7A: SCM Promotion Gate (Development -> Testing) ==='
+                echo '=== Stage 7A: Development to Testing ==='
                 script {
-                    runCmd('python analyzer/promote.py --item "CommitSleuth Suite" --from Development --to Testing --approver CCB --tests-passed')
+                    runCmd(
+                        'python analyzer/promote.py --item "CommitSleuth Suite" --from Development --to Testing --approver CCB --tests-passed'
+                    )
                 }
             }
         }
 
         stage('Promote to Production') {
             when {
-                expression { env.GIT_BRANCH ==~ /.*main.*/ }
+                expression {
+                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: '') ==
+                       ~ /.*main.*/
+                }
             }
             steps {
-                echo '=== Stage 7B: SCM Promotion Gate (Testing -> Production) ==='
+                echo '=== Stage 7B: Testing to Production ==='
                 script {
-                    runCmd('python analyzer/promote.py --item "CommitSleuth Suite" --from Testing --to Production --approver "Faculty Guide / CCB" --tests-passed --tag v1.0.0')
+                    runCmd(
+                        'python analyzer/promote.py --item "CommitSleuth Suite" --from Testing --to Production --approver "Faculty Guide / CCB" --tests-passed --tag v1.0.0'
+                    )
                 }
             }
         }
@@ -119,20 +146,29 @@ pipeline {
 
     post {
         success {
-            echo '=== Pipeline Execution Succeeded: Recording Status Accounting ==='
+            echo '=== Build Succeeded: Recording SCM Status ==='
             script {
-                runCmd("python analyzer/record_build.py --result SUCCESS --build ${env.BUILD_NUMBER} --branch \"${env.GIT_BRANCH ?: 'main'}\"")
+                runCmd(
+                    "python analyzer/record_build.py --result SUCCESS --build ${env.BUILD_NUMBER} --branch \"${env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main'}\""
+                )
             }
         }
+
         failure {
-            echo '=== Pipeline Execution Failed: Triggering CommitSleuth Failure Attribution ==='
+            echo '=== Build Failed: Recording Failure Information ==='
             script {
-                runCmd("python analyzer/record_build.py --result FAILURE --build ${env.BUILD_NUMBER} --log build.log --branch \"${env.GIT_BRANCH ?: 'main'}\"")
+                runCmd(
+                    "python analyzer/record_build.py --result FAILURE --build ${env.BUILD_NUMBER} --log build.log --branch \"${env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main'}\""
+                )
             }
         }
+
         always {
-            echo '=== Archiving SCM Evidence & Build Logs ==='
-            archiveArtifacts artifacts: 'build.log, reports/**', allowEmptyArchive: true
+            echo '=== Archiving SCM Evidence and Build Logs ==='
+            archiveArtifacts(
+                artifacts: 'build.log, reports/**',
+                allowEmptyArchive: true
+            )
         }
     }
 }
