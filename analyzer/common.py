@@ -1,6 +1,7 @@
 
 """Common utilities for CommitSleuth:
-Database connection, configuration management, and audit logging.
+Database connection, schema initialization, configuration management,
+and audit logging.
 """
 
 import os
@@ -12,11 +13,14 @@ import yaml
 # Project root directory
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Use Jenkins CS_DB when configured; otherwise use the project database.
+# Database path: use CS_DB when configured; otherwise use the project DB.
 DB = os.environ.get(
     "CS_DB",
     os.path.join(ROOT, "database", "commitsleuth.db")
 )
+
+# Database schema file
+SCHEMA_FILE = os.path.join(ROOT, "database", "schema.sql")
 
 # Configuration file
 CFG_FILE = os.path.join(ROOT, "scoring_config.yaml")
@@ -48,8 +52,67 @@ def ex(sql, args=()):
         return cur.lastrowid
 
 
+def initialize_schema():
+    """
+    Initialize all application tables from database/schema.sql.
+
+    Existing tables and records are preserved because the schema uses
+    CREATE TABLE IF NOT EXISTS. This does not migrate existing tables
+    whose columns or constraints differ from the schema.
+    """
+    if not os.path.isfile(SCHEMA_FILE):
+        raise FileNotFoundError(
+            f"Database schema file not found: {SCHEMA_FILE}"
+        )
+
+    with open(SCHEMA_FILE, "r", encoding="utf-8") as file:
+        schema_sql = file.read()
+
+    with connect() as con:
+        con.executescript(schema_sql)
+
+    print(f"Database schema initialized: {os.path.abspath(DB)}")
+
+
+def check_table_exists(table_name):
+    """Check whether a table exists in the configured database."""
+    row = q(
+        """
+        SELECT name
+        FROM sqlite_master
+        WHERE type = 'table' AND name = ?
+        """,
+        (table_name,)
+    )
+
+    return bool(row)
+
+
+def initialize_database():
+    """Initialize the schema and return the database path and tables."""
+    initialize_schema()
+
+    with connect() as con:
+        tables = [
+            row["name"]
+            for row in con.execute(
+                """
+                SELECT name
+                FROM sqlite_master
+                WHERE type = 'table'
+                ORDER BY name
+                """
+            ).fetchall()
+        ]
+
+    return {
+        "database": os.path.abspath(DB),
+        "tables": tables
+    }
+
+
 def log_audit(username, action, details=""):
-    """Record an audit event when the audit table is available."""
+    """Record an audit event without interrupting the main operation."""
     try:
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -61,9 +124,8 @@ def log_audit(username, action, details=""):
             """,
             (now, username or "system", action, details)
         )
-    except sqlite3.Error:
-        # Audit logging should not interrupt the main operation.
-        pass
+    except sqlite3.Error as error:
+        print(f"Warning: audit logging failed: {error}")
 
 
 def load_cfg():
@@ -122,53 +184,15 @@ def get_database_path():
     return os.path.abspath(DB)
 
 
-def check_table_exists(table_name):
-    """Check whether a table exists in the configured database."""
-    row = q(
-        """
-        SELECT name
-        FROM sqlite_master
-        WHERE type = 'table' AND name = ?
-        """,
-        (table_name,)
-    )
-
-    return bool(row)
-
-
-def initialize_database():
-    """
-    Verify that the configured database can be opened.
-
-    This function intentionally does not create application tables.
-    Their definitions must match the existing project schema.
-    """
-    with connect() as con:
-        return {
-            "database": os.path.abspath(DB),
-            "tables": [
-                row["name"]
-                for row in con.execute(
-                    """
-                    SELECT name
-                    FROM sqlite_master
-                    WHERE type = 'table'
-                    ORDER BY name
-                    """
-                ).fetchall()
-            ]
-        }
-
-
 if __name__ == "__main__":
     info = initialize_database()
 
-    print("CommitSleuth database check")
+    print("\nCommitSleuth Database Check")
+    print("=" * 35)
     print("Database:", info["database"])
-    print("Tables found:")
+    print("\nTables found:")
 
-    if info["tables"]:
-        for table in info["tables"]:
-            print(" -", table)
-    else:
-        print(" No tables found. Database initialization is required.")
+    for table in info["tables"]:
+        print(f" - {table}")
+
+    print(f"\nTotal tables: {len(info['tables'])}")
