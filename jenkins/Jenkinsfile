@@ -1,4 +1,4 @@
-
+```groovy
 /*
  * CommitSleuth SCM Declarative CI Pipeline
  * Course: ISWE403L — Software Configuration Management
@@ -18,7 +18,7 @@ pipeline {
     agent any
 
     tools {
-        // Names must match Jenkins > Manage Jenkins > Tools.
+        // Must match the names configured in Jenkins > Tools.
         maven 'Maven'
         jdk 'jdk-23'
     }
@@ -26,6 +26,7 @@ pipeline {
     environment {
         CS_DB = "${WORKSPACE}/database/commitsleuth.db"
         PYTHONIOENCODING = 'utf-8'
+        PYTHON_EXE = 'C:\\Users\\PRAKASH\\AppData\\Local\\Programs\\Python\\Python312\\python.exe'
     }
 
     options {
@@ -67,7 +68,12 @@ pipeline {
                 script {
                     runCmd('java -version')
                     runCmd('mvn -version')
-                    runCmd('python --version')
+
+                    if (isUnix()) {
+                        runCmd('python3 --version')
+                    } else {
+                        runCmd('"%PYTHON_EXE%" --version')
+                    }
                 }
             }
         }
@@ -112,16 +118,22 @@ pipeline {
         stage('Promote to Testing') {
             when {
                 expression {
-                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: '') ==
-                       ~ /.*(develop|release).*/
+                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: '') ==~
+                        /.*(develop|release).*/
                 }
             }
             steps {
                 echo '=== Stage 7A: Development to Testing ==='
                 script {
-                    runCmd(
-                        'python analyzer/promote.py --item "CommitSleuth Suite" --from Development --to Testing --approver CCB --tests-passed'
-                    )
+                    if (isUnix()) {
+                        runCmd(
+                            'python3 analyzer/promote.py --item "CommitSleuth Suite" --from Development --to Testing --approver CCB --tests-passed'
+                        )
+                    } else {
+                        runCmd(
+                            '"%PYTHON_EXE%" analyzer/promote.py --item "CommitSleuth Suite" --from Development --to Testing --approver CCB --tests-passed'
+                        )
+                    }
                 }
             }
         }
@@ -129,16 +141,22 @@ pipeline {
         stage('Promote to Production') {
             when {
                 expression {
-                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: '') ==
-                       ~ /.*main.*/
+                    (env.BRANCH_NAME ?: env.GIT_BRANCH ?: '') ==~
+                        /.*main.*/
                 }
             }
             steps {
                 echo '=== Stage 7B: Testing to Production ==='
                 script {
-                    runCmd(
-                        'python analyzer/promote.py --item "CommitSleuth Suite" --from Testing --to Production --approver "Faculty Guide / CCB" --tests-passed --tag v1.0.0'
-                    )
+                    if (isUnix()) {
+                        runCmd(
+                            'python3 analyzer/promote.py --item "CommitSleuth Suite" --from Testing --to Production --approver "Faculty Guide / CCB" --tests-passed --tag v1.0.0'
+                        )
+                    } else {
+                        runCmd(
+                            '"%PYTHON_EXE%" analyzer/promote.py --item "CommitSleuth Suite" --from Testing --to Production --approver "Faculty Guide / CCB" --tests-passed --tag v1.0.0'
+                        )
+                    }
                 }
             }
         }
@@ -148,18 +166,30 @@ pipeline {
         success {
             echo '=== Build Succeeded: Recording SCM Status ==='
             script {
-                runCmd(
-                    "python analyzer/record_build.py --result SUCCESS --build ${env.BUILD_NUMBER} --branch \"${env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main'}\""
-                )
+                if (isUnix()) {
+                    runCmd(
+                        "python3 analyzer/record_build.py --result SUCCESS --build ${env.BUILD_NUMBER} --branch \"${env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main'}\""
+                    )
+                } else {
+                    runCmd(
+                        "\"%PYTHON_EXE%\" analyzer/record_build.py --result SUCCESS --build ${env.BUILD_NUMBER} --branch \"${env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main'}\""
+                    )
+                }
             }
         }
 
         failure {
             echo '=== Build Failed: Recording Failure Information ==='
             script {
-                runCmd(
-                    "python analyzer/record_build.py --result FAILURE --build ${env.BUILD_NUMBER} --log build.log --branch \"${env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main'}\""
-                )
+                if (isUnix()) {
+                    runCmd(
+                        "python3 analyzer/record_build.py --result FAILURE --build ${env.BUILD_NUMBER} --log build.log --branch \"${env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main'}\""
+                    )
+                } else {
+                    runCmd(
+                        "\"%PYTHON_EXE%\" analyzer/record_build.py --result FAILURE --build ${env.BUILD_NUMBER} --log build.log --branch \"${env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main'}\""
+                    )
+                }
             }
         }
 
@@ -172,3 +202,4 @@ pipeline {
         }
     }
 }
+```
